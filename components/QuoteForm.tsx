@@ -5,6 +5,8 @@ import { services } from "@/data/services";
 
 export default function QuoteForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: "",
     company: "",
@@ -18,10 +20,26 @@ export default function QuoteForm() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: POST to /api/quote when backend is wired
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/quote", {
+        method: "POST",
+      headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || "Something went wrong");
+      }
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -82,9 +100,14 @@ export default function QuoteForm() {
         <label htmlFor="q-details" className="label">Cargo details</label>
         <textarea id="q-details" rows={3} className="input" value={form.details} onChange={set("details")} placeholder="e.g. 8 pallets, 4.2 tonnes, needs tail-lift" />
       </div>
-      <button type="submit" className="btn-primary mt-6 w-full sm:w-auto">
-        Request Quote →
+      <button type="submit" disabled={loading} className="btn-primary mt-6 w-full disabled:opacity-60 sm:w-auto">
+        {loading ? "Sending…" : "Request Quote →"}
       </button>
+      {error && (
+        <p className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+          {error}
+        </p>
+      )}
       <p className="mt-3 text-xs text-muted">
         No spam. Our team responds within 2 business hours.
       </p>

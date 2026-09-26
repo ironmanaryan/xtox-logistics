@@ -13,6 +13,8 @@ const vehicleTypes = [
 
 export default function DriverForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -27,10 +29,26 @@ export default function DriverForm() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: POST to /api/drivers when backend is wired
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/drivers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || "Something went wrong");
+      }
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -96,9 +114,14 @@ export default function DriverForm() {
         WhatsApp for load offers.
       </label>
 
-      <button type="submit" className="btn-primary mt-6 w-full">
-        Submit & Start Earning →
+      <button type="submit" disabled={loading} className="btn-primary mt-6 w-full disabled:opacity-60">
+        {loading ? "Submitting…" : "Submit & Start Earning →"}
       </button>
+      {error && (
+        <p className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+          {error}
+        </p>
+      )}
       <p className="mt-3 text-xs text-muted">
         Documents verified within 24 hrs · Zero onboarding fee
       </p>

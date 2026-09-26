@@ -20,22 +20,39 @@ export default function Hero() {
   // Track shipment
   const [trackingId, setTrackingId] = useState("");
   const [trackMsg, setTrackMsg] = useState<string | null>(null);
+  const [tracking, setTracking] = useState(false);
 
   // Rate calculator
   const [distance, setDistance] = useState("");
   const [weight, setWeight] = useState("");
   const [rate, setRate] = useState<RateResult | null>(null);
 
-  const handleTrack = (e: React.FormEvent) => {
+  const handleTrack = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!trackingId.trim()) {
       setTrackMsg("Please enter a shipment / LR number.");
       return;
     }
-    // Demo response — backend API will replace this later.
-    setTrackMsg(
-      `Shipment ${trackingId.toUpperCase()} · In transit · ETA 2 days · Nashik → Nagpur hub`
-    );
+    setTracking(true);
+    setTrackMsg(null);
+    try {
+      const res = await fetch(`/api/track?code=${encodeURIComponent(trackingId.trim())}`);
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        const s = data.shipment;
+        setTrackMsg(
+          `${s.tracking_code} · ${s.status.replace(/_/g, " ")} · ${s.origin} → ${s.destination}${s.current_location ? ` · Now at: ${s.current_location}` : ""}${s.eta_date ? ` · ETA: ${s.eta_date}` : ""}`
+        );
+      } else {
+        setTrackMsg(data.error === "Shipment not found"
+          ? `No shipment found for “${trackingId.toUpperCase()}”. Double-check the LR number.`
+          : data.error || "Tracking lookup failed.");
+      }
+    } catch {
+      setTrackMsg("Network error — please try again.");
+    } finally {
+      setTracking(false);
+    }
   };
 
   const handleRate = (e: React.FormEvent) => {
@@ -111,8 +128,8 @@ export default function Hero() {
                     onChange={(e) => setTrackingId(e.target.value)}
                     aria-label="Shipment number"
                   />
-                  <button type="submit" className="btn-primary sm:w-36">
-                    Track
+                  <button type="submit" disabled={tracking} className="btn-primary sm:w-36 disabled:opacity-60">
+                    {tracking ? "Checking…" : "Track"}
                   </button>
                 </form>
               ) : (
