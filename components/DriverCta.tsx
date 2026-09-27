@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CheckCircle2 } from "lucide-react";
 
 export default function DriverCta() {
   return (
@@ -25,10 +26,14 @@ export default function DriverCta() {
               payments within 48 hours, and zero commission on first 10 trips.
             </p>
             <ul className="mt-5 grid max-w-lg gap-2 text-sm text-white/80 sm:grid-cols-2">
-              <li>✅ Daily load availability</li>
-              <li>✅ 48-hr payment assurance</li>
-              <li>✅ Free digital LR tools</li>
-              <li>✅ Fuel & toll support desk</li>
+              {["Daily load availability", "48-hr payment assurance", "Free digital LR tools", "Fuel & toll support desk"].map(
+                (item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-brand-yellow" aria-hidden />
+                    {item}
+                  </li>
+                )
+              )}
             </ul>
           </div>
 

@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import ServiceLayout from "@/components/ServiceLayout";
 import ServiceCtaBand from "@/components/ServiceCtaBand";
 import PackersCalculator from "@/components/PackersCalculator";
+import { Package, ClipboardCheck, Layers, ShieldCheck, Truck } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Packers & Movers",
@@ -39,7 +40,8 @@ export default function PackersMoversPage() {
       <Navbar />
       <main>
         <ServiceLayout
-          eyebrow="📦 Packers & Movers"
+          icon={<Package className="h-3.5 w-3.5" />}
+          eyebrow="Packers & Movers"
           title="Shifting homes or offices?"
           highlight="Move damage-free."
           description="From a 1BHK across town to a 400-seat office across states — trained crews, graded packing material and insured, GPS-tracked fleets on every move."
@@ -76,6 +78,22 @@ export default function PackersMoversPage() {
                 </div>
               ))}
             </div>
+          </div>
+
+          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { icon: ClipboardCheck, t: "Free pre-move survey" },
+              { icon: Layers, t: "Graded packing material" },
+              { icon: Truck, t: "GPS-tracked fleet" },
+              { icon: ShieldCheck, t: "All-risk transit insurance" },
+            ].map(({ icon: Icon, t }) => (
+              <div key={t} className="card flex items-center gap-4 p-5">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-yellow text-brand-black">
+                  <Icon className="h-5 w-5" aria-hidden />
+                </span>
+                <p className="text-sm font-bold">{t}</p>
+              </div>
+            ))}
           </div>
         </ServiceLayout>
 

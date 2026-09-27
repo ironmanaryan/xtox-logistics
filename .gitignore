@@ -5,6 +5,9 @@ out
 next-env.d.ts
 .DS_Store
 
+# Local env files (keep the example tracked)
 .vercel
 .env*
-.env.example
+!.env.example
+
+*.log

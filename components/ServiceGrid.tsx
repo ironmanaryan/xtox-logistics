@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { Package, Ship, Truck, Wheat } from "lucide-react";
 import { services } from "@/data/services";
+import type { LucideIcon } from "lucide-react";
 
-const icons: Record<string, string> = {
-  "packers-movers": "📦",
-  "import-export": "🚢",
-  "sme-transport": "🚛",
-  "agri-export": "🌾",
+const icons: Record<string, LucideIcon> = {
+  "packers-movers": Package,
+  "import-export": Ship,
+  "sme-transport": Truck,
+  "agri-export": Wheat,
 };
 
 export default function ServiceGrid() {
@@ -50,7 +52,9 @@ export default function ServiceGrid() {
         ref={ref}
         className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
       >
-        {services.map((s, i) => (
+        {services.map((s, i) => {
+          const Icon = icons[s.key];
+          return (
           <Link
             key={s.key}
             href={s.slug}
@@ -59,8 +63,8 @@ export default function ServiceGrid() {
             }`}
             style={{ transitionDelay: `${i * 90}ms` }}
           >
-            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-yellow text-2xl transition-transform duration-300 group-hover:scale-110">
-              {icons[s.key]}
+            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-yellow text-brand-black transition-transform duration-300 group-hover:scale-110">
+              {Icon && <Icon className="h-6 w-6" aria-hidden />}
             </span>
             <h3 className="mt-4 text-lg font-extrabold">{s.name}</h3>
             <p className="mt-1.5 flex-1 text-sm leading-relaxed text-muted">
@@ -79,7 +83,8 @@ export default function ServiceGrid() {
               <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
             </span>
           </Link>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

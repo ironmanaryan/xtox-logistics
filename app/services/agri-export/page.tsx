@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ServiceLayout from "@/components/ServiceLayout";
 import ServiceCtaBand from "@/components/ServiceCtaBand";
+import { Wheat, Snowflake, Warehouse, FileBarChart2, Leaf } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Farmer Agri-Export",
@@ -11,10 +12,10 @@ export const metadata: Metadata = {
 };
 
 const coldChain = [
-  { icon: "❄️", t: "Pre-cool & reefer fleet", d: "Produce pre-cooled at farm gate, moved in 2–8°C / 0–4°C reefer trucks with live temperature logging." },
-  { icon: "🌡️", t: "Cold storage buffers", d: "Partner cold rooms at major mandis and ports to absorb market-day delays without quality loss." },
-  { icon: "📊", t: "Temperature proof", d: "Digital temperature records shared with buyers — premium compliance for EU/US produce." },
-  { icon: "🥬", t: "Shelf-life extension", d: "Controlled transit cuts spoilage from 20–30% to under 5% on perishables like grapes, bananas and vegetables." },
+  { icon: Snowflake, t: "Pre-cool & reefer fleet", d: "Produce pre-cooled at farm gate, moved in 2–8°C / 0–4°C reefer trucks with live temperature logging." },
+  { icon: Warehouse, t: "Cold storage buffers", d: "Partner cold rooms at major mandis and ports to absorb market-day delays without quality loss." },
+  { icon: FileBarChart2, t: "Temperature proof", d: "Digital temperature records shared with buyers — premium compliance for EU/US produce." },
+  { icon: Leaf, t: "Shelf-life extension", d: "Controlled transit cuts spoilage from 20–30% to under 5% on perishables like grapes, bananas and vegetables." },
 ];
 
 const benefits = [
@@ -32,7 +33,8 @@ export default function AgriExportPage() {
       <Navbar />
       <main>
         <ServiceLayout
-          eyebrow="🌾 Farmer Agri-Export"
+          icon={<Wheat className="h-3.5 w-3.5" />}
+          eyebrow="Farmer Agri-Export"
           title="Your harvest deserves"
           highlight="global prices."
           description="Cold-chain from farm gate to foreign shelf, APEDA paperwork handled, and market intelligence that tells you exactly where your crop earns the most."
@@ -43,13 +45,13 @@ export default function AgriExportPage() {
               Cold-chain that protects every rupee
             </h2>
             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {coldChain.map((c) => (
-                <div key={c.t} className="card p-6">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-yellow text-xl">
-                    {c.icon}
+              {coldChain.map(({ icon: Icon, t, d }) => (
+                <div key={t} className="card p-6">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-yellow text-brand-black">
+                    <Icon className="h-5 w-5" aria-hidden />
                   </span>
-                  <h3 className="mt-4 font-extrabold">{c.t}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted">{c.d}</p>
+                  <h3 className="mt-4 font-extrabold">{t}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted">{d}</p>
                 </div>
               ))}
             </div>

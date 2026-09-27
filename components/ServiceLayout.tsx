@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 interface ServiceLayoutProps {
+  icon?: React.ReactNode;
   eyebrow: string;
   title: string;
   highlight: string;
@@ -9,6 +10,7 @@ interface ServiceLayoutProps {
 }
 
 export default function ServiceLayout({
+  icon,
   eyebrow,
   title,
   highlight,
@@ -25,7 +27,10 @@ export default function ServiceLayout({
             <span className="text-brand-black">{title}</span>
           </nav>
 
-          <span className="chip-yellow mt-6">{eyebrow}</span>
+          <span className="chip-yellow mt-6">
+            {icon}
+            {eyebrow}
+          </span>
           <h1 className="mt-4 max-w-3xl text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl">
             {title}{" "}
             <span className="relative inline-block">

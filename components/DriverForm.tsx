@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { PartyPopper } from "lucide-react";
 
 const vehicleTypes = [
   "Tata Ace / Mini truck",
@@ -54,8 +55,8 @@ export default function DriverForm() {
   if (submitted) {
     return (
       <div className="card flex flex-col items-center p-10 text-center">
-        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-yellow text-2xl">
-          🎉
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-yellow text-brand-black">
+          <PartyPopper className="h-7 w-7" aria-hidden />
         </span>
         <h3 className="mt-4 text-xl font-extrabold">
           Welcome aboard, {form.name.split(" ")[0] || "Partner"}!

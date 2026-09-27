@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Truck, Package, Calculator, TruckElectric, Ship, Tractor } from "lucide-react";
 import { heroMetrics } from "@/data/metrics";
 
 type Tab = "track" | "rate";
@@ -71,7 +72,10 @@ export default function Hero() {
       <div className="section-pad relative grid gap-12 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
         {/* Left: headline + tabbed search bar */}
         <div>
-          <span className="chip-yellow">🚚 India&apos;s emerging B2B logistics network</span>
+          <span className="chip-yellow">
+            <Truck className="h-3.5 w-3.5" aria-hidden />
+            India&apos;s emerging B2B logistics network
+          </span>
           <h1 className="mt-5 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
             Logistics that moves
             <br />
@@ -96,25 +100,27 @@ export default function Hero() {
                 role="tab"
                 aria-selected={tab === "track"}
                 onClick={() => setTab("track")}
-                className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-300 ${
+                className={`inline-flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-300 ${
                   tab === "track"
                     ? "bg-white text-brand-black shadow-sm"
                     : "text-muted hover:text-brand-black"
                 }`}
               >
-                📦 Track Shipment
+                <Package className="h-4 w-4" aria-hidden />
+                Track Shipment
               </button>
               <button
                 role="tab"
                 aria-selected={tab === "rate"}
                 onClick={() => setTab("rate")}
-                className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-300 ${
+                className={`inline-flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-300 ${
                   tab === "rate"
                     ? "bg-white text-brand-black shadow-sm"
                     : "text-muted hover:text-brand-black"
                 }`}
               >
-                🧮 Freight Rate Calculator
+                <Calculator className="h-4 w-4" aria-hidden />
+                Freight Rate Calculator
               </button>
             </div>
 
@@ -180,7 +186,8 @@ export default function Hero() {
               Get a Free Quote →
             </a>
             <a href="/drivers" className="btn-secondary">
-              🚛 Become a Driver Partner
+              <Truck className="h-4 w-4" aria-hidden />
+              Become a Driver Partner
             </a>
           </div>
         </div>
@@ -201,12 +208,12 @@ export default function Hero() {
             <p className="mt-2 text-3xl font-extrabold">{heroMetrics[1].value}</p>
             <p className="text-sm text-muted">{heroMetrics[1].label}</p>
             <div className="mt-3 flex -space-x-2">
-              {["🚛", "🚚", "🚜", "🚢"].map((e, i) => (
+              {[TruckElectric, Truck, Tractor, Ship].map((Icon, i) => (
                 <span
                   key={i}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-brand-yellow text-sm"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-brand-yellow text-brand-black"
                 >
-                  {e}
+                  <Icon className="h-4 w-4" aria-hidden />
                 </span>
               ))}
             </div>
@@ -217,7 +224,7 @@ export default function Hero() {
               On-time delivery
             </p>
             <p className="mt-2 text-4xl font-extrabold">{heroMetrics[3].value}</p>
-            <p className="mt-1 text-sm text-white/60">{heroMetrics[2].label} covered</p>
+            <p className="mt-1 text-sm text-white/60">{heroMetrics[2].value} states covered</p>
           </div>
         </div>
       </div>

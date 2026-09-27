@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CheckCircle2 } from "lucide-react";
 import { services } from "@/data/services";
 
 export default function QuoteForm() {
@@ -11,6 +12,7 @@ export default function QuoteForm() {
     name: "",
     company: "",
     service: services[0].name,
+    phone: "",
     from: "",
     to: "",
     details: "",
@@ -45,8 +47,8 @@ export default function QuoteForm() {
   if (submitted) {
     return (
       <div className="card flex flex-col items-center p-10 text-center">
-        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-yellow text-2xl">
-          ✅
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-yellow text-brand-black">
+          <CheckCircle2 className="h-7 w-7" aria-hidden />
         </span>
         <h3 className="mt-4 text-xl font-extrabold">Request received!</h3>
         <p className="mt-2 max-w-sm text-sm text-muted">
@@ -85,7 +87,7 @@ export default function QuoteForm() {
         </div>
         <div>
           <label htmlFor="q-phone" className="label">Phone</label>
-          <input id="q-phone" required type="tel" pattern="[0-9+\\-\\s]{8,15}" className="input" placeholder="+91 98765 43210" />
+          <input id="q-phone" required type="tel" pattern="[0-9+\\-\\s]{8,15}" className="input" value={form.phone} onChange={set("phone")} placeholder="+91 98765 43210" />
         </div>
         <div>
           <label htmlFor="q-from" className="label">From (city)</label>

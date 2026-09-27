@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Phone, Mail } from "lucide-react";
 import Logo from "./Logo";
 import { services } from "@/data/services";
 
@@ -13,11 +14,13 @@ export default function Footer() {
             moving India&apos;s goods X to X, door to door.
           </p>
           <div className="mt-5 flex flex-col gap-1.5 text-sm text-muted">
-            <a href="tel:+910000000000" className="hover:text-brand-black">
-              📞 +91 00000 00000
+            <a href="tel:+910000000000" className="flex items-center gap-2 hover:text-brand-black">
+              <Phone className="h-4 w-4 shrink-0" aria-hidden />
+              +91 00000 00000
             </a>
-            <a href="mailto:hello@xtoxlogistics.com" className="hover:text-brand-black">
-              ✉️ hello@xtoxlogistics.com
+            <a href="mailto:hello@xtoxlogistics.com" className="flex items-center gap-2 hover:text-brand-black">
+              <Mail className="h-4 w-4 shrink-0" aria-hidden />
+              hello@xtoxlogistics.com
             </a>
           </div>
         </div>

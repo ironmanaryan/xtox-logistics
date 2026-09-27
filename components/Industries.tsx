@@ -1,14 +1,14 @@
 const industries = [
-  "🏭 Manufacturing",
-  "🛒 Retail & FMCG",
-  "🌾 Agri & Spices",
-  "🧱 Building Materials",
-  "💊 Pharma",
-  "🧵 Textiles",
-  "⚙️ Auto Components",
-  "📱 Electronics",
-  "🪑 Furniture",
-  "📦 E-commerce",
+  "Manufacturing",
+  "Retail & FMCG",
+  "Agri & Spices",
+  "Building Materials",
+  "Pharma",
+  "Textiles",
+  "Auto Components",
+  "Electronics",
+  "Furniture",
+  "E-commerce",
 ];
 
 export default function Industries() {

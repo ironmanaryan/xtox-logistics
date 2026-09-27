@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ClipboardList, FileText, Lock } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
@@ -39,15 +40,21 @@ export default function HomePage() {
             </p>
             <ul className="mt-6 space-y-3 text-sm">
               <li className="flex items-center gap-3">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-yellow">📋</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-yellow text-brand-black">
+                  <ClipboardList className="h-4 w-4" aria-hidden />
+                </span>
                 Single point of contact for all 4 services
               </li>
               <li className="flex items-center gap-3">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-yellow">📄</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-yellow text-brand-black">
+                  <FileText className="h-4 w-4" aria-hidden />
+                </span>
                 Transparent digital billing & PODs
               </li>
               <li className="flex items-center gap-3">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-yellow">🔒</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-yellow text-brand-black">
+                  <Lock className="h-4 w-4" aria-hidden />
+                </span>
                 Insurance & compliance handled end-to-end
               </li>
             </ul>

@@ -21,7 +21,6 @@ export default function Logo({ variant = "full", className = "h-9" }: LogoProps)
       height={variant === "full" ? 480 : 400}
       priority
       className={className}
-      style={{ width: "auto", height: "auto" }}
     />
   );
 }

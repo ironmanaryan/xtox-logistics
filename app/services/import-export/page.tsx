@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ServiceLayout from "@/components/ServiceLayout";
 import ServiceCtaBand from "@/components/ServiceCtaBand";
+import { Ship, FileCheck2, Timer, Globe2, Warehouse } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Import / Export Assistance",
@@ -25,7 +26,8 @@ export default function ImportExportPage() {
       <Navbar />
       <main>
         <ServiceLayout
-          eyebrow="🚢 Import / Export"
+          icon={<Ship className="h-3.5 w-3.5" />}
+          eyebrow="Import / Export"
           title="Customs, freight, paperwork —"
           highlight="fully handled."
           description="One EXIM desk for your imports and exports: classification, documentation, customs clearance and door delivery, with live milestone updates on every shipment."
@@ -67,15 +69,17 @@ export default function ImportExportPage() {
 
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: "📑", t: "100% doc accuracy check", d: "Every file verified against HS code and LUT before filing." },
-              { icon: "⏱️", t: "48-hr typical clearance", d: "Pre-alerts and PNOR tracking keep customs dwell low." },
-              { icon: "🌐", t: "FCL · LCL · Air", d: "Carrier contracts on 40+ global trade lanes." },
-              { icon: "🏠", t: "True door-to-door", d: "Factory to buyer's warehouse on a single invoice." },
-            ].map((f) => (
-              <div key={f.t} className="card p-5">
-                <span className="text-2xl">{f.icon}</span>
-                <h3 className="mt-3 text-sm font-extrabold">{f.t}</h3>
-                <p className="mt-1 text-xs leading-relaxed text-muted">{f.d}</p>
+              { icon: FileCheck2, t: "100% doc accuracy check", d: "Every file verified against HS code and LUT before filing." },
+              { icon: Timer, t: "48-hr typical clearance", d: "Pre-alerts and PNOR tracking keep customs dwell low." },
+              { icon: Globe2, t: "FCL · LCL · Air", d: "Carrier contracts on 40+ global trade lanes." },
+              { icon: Warehouse, t: "True door-to-door", d: "Factory to buyer's warehouse on a single invoice." },
+            ].map(({ icon: Icon, t, d }) => (
+              <div key={t} className="card p-5">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-yellow text-brand-black">
+                  <Icon className="h-5 w-5" aria-hidden />
+                </span>
+                <h3 className="mt-3 text-sm font-extrabold">{t}</h3>
+                <p className="mt-1 text-xs leading-relaxed text-muted">{d}</p>
               </div>
             ))}
           </div>

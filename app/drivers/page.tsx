@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DriverForm from "@/components/DriverForm";
+import { Truck, IndianRupee, FileText, Fuel, ShieldCheck, Trophy } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Become a Driver Partner",
@@ -10,12 +11,12 @@ export const metadata: Metadata = {
 };
 
 const perks = [
-  { icon: "🚛", t: "Daily load offers", d: "Loads matched to your route and vehicle type, straight on WhatsApp." },
-  { icon: "💸", t: "48-hour payment", d: "No 30–60 day waits. POD cleared, money in your account in 48 hrs." },
-  { icon: "🧾", t: "Free digital LR tools", d: "e-LR, e-POD and trip summaries — no paperwork running around." },
-  { icon: "⛽", t: "Fuel & toll desk", d: "Discount tie-ups at fuel stations and FASTag recharge support." },
-  { icon: "🛡️", t: "Trip insurance", d: "Accident cover for driver and helper on every XtoX-matched trip." },
-  { icon: "🏆", t: "Loyalty bonuses", d: "Complete 20 trips/month and unlock a monthly bonus slab." },
+  { icon: Truck, t: "Daily load offers", d: "Loads matched to your route and vehicle type, straight on WhatsApp." },
+  { icon: IndianRupee, t: "48-hour payment", d: "No 30–60 day waits. POD cleared, money in your account in 48 hrs." },
+  { icon: FileText, t: "Free digital LR tools", d: "e-LR, e-POD and trip summaries — no paperwork running around." },
+  { icon: Fuel, t: "Fuel & toll desk", d: "Discount tie-ups at fuel stations and FASTag recharge support." },
+  { icon: ShieldCheck, t: "Trip insurance", d: "Accident cover for driver and helper on every XtoX-matched trip." },
+  { icon: Trophy, t: "Loyalty bonuses", d: "Complete 20 trips/month and unlock a monthly bonus slab." },
 ];
 
 export default function DriversPage() {
@@ -27,7 +28,10 @@ export default function DriversPage() {
         <section className="dot-grid border-b border-line">
           <div className="section-pad grid gap-10 py-14 lg:grid-cols-2 lg:py-20">
             <div>
-              <span className="chip-yellow">🚛 Driver Partner Program</span>
+              <span className="chip-yellow">
+                <Truck className="h-3.5 w-3.5" aria-hidden />
+                Driver Partner Program
+              </span>
               <h1 className="mt-4 text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl">
                 Your truck.
                 <br />
@@ -73,13 +77,13 @@ export default function DriversPage() {
             Built for owner-operators
           </h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {perks.map((p) => (
-              <div key={p.t} className="card p-6">
-                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-yellow text-2xl">
-                  {p.icon}
+            {perks.map(({ icon: Icon, t, d }) => (
+              <div key={t} className="card p-6">
+                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-yellow text-brand-black">
+                  <Icon className="h-6 w-6" aria-hidden />
                 </span>
-                <h3 className="mt-4 font-extrabold">{p.t}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted">{p.d}</p>
+                <h3 className="mt-4 font-extrabold">{t}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">{d}</p>
               </div>
             ))}
           </div>

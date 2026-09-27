@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ServiceLayout from "@/components/ServiceLayout";
 import ServiceCtaBand from "@/components/ServiceCtaBand";
+import { Truck, Zap, CalendarClock } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "SME Transport Support",
@@ -15,7 +16,7 @@ const modes = [
     name: "On-Demand",
     tag: "Pay per trip",
     best: "Best for fluctuating, ad-hoc loads",
-    icon: "⚡",
+    icon: Zap,
     features: [
       "Vehicle at your gate in 2–6 hrs",
       "Full fleet menu: Tata Ace to 32-ft SXL",
@@ -30,7 +31,7 @@ const modes = [
     name: "Scheduled Fleet",
     tag: "Contracted lanes",
     best: "Best for fixed routes & recurring volume",
-    icon: "🗓️",
+    icon: CalendarClock,
     features: [
       "Dedicated vehicles on fixed schedules",
       "Locked monthly rates — no surge",
@@ -58,7 +59,8 @@ export default function SmeTransportPage() {
       <Navbar />
       <main>
         <ServiceLayout
-          eyebrow="🚛 SME Transport"
+          icon={<Truck className="h-3.5 w-3.5" />}
+          eyebrow="SME Transport"
           title="Your growth partner on"
           highlight="every lane."
           description="Whether it's one truck today or a contracted fleet every Monday — SMEs get enterprise-grade transport without enterprise overheads."
@@ -80,8 +82,8 @@ export default function SmeTransportPage() {
                     </span>
                   )}
                   <div className="flex items-center gap-3">
-                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-yellow text-2xl">
-                      {m.icon}
+                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-yellow text-brand-black">
+                      <m.icon className="h-6 w-6" aria-hidden />
                     </span>
                     <div>
                       <h3 className="text-xl font-extrabold">{m.name}</h3>
