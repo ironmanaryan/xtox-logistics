@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ClipboardList, FileText, Lock } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import JsonLd, { organizationSchema } from "@/components/JsonLd";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import MetricsBand from "@/components/MetricsBand";
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={organizationSchema} />
       <Navbar />
       <main>
         <Hero />

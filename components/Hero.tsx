@@ -72,11 +72,11 @@ export default function Hero() {
       <div className="section-pad relative grid gap-12 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
         {/* Left: headline + tabbed search bar */}
         <div>
-          <span className="chip-yellow">
+          <span className="chip-yellow animate-fadeUp">
             <Truck className="h-3.5 w-3.5" aria-hidden />
             India&apos;s emerging B2B logistics network
           </span>
-          <h1 className="mt-5 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="animate-fadeUp mt-5 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>
             Logistics that moves
             <br />
             at the speed of{" "}
@@ -88,13 +88,13 @@ export default function Hero() {
               />
             </span>
           </h1>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+          <p className="animate-fadeUp mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg" style={{ "--reveal-delay": "180ms" } as React.CSSProperties}>
             Packers &amp; Movers, Import/Export clearance, SME transport and
             farmer-first agri-export — one partner, one dashboard, door to door.
           </p>
 
           {/* Multi-tab search / tracking bar */}
-          <div className="card mt-8 max-w-xl p-2">
+          <div className="animate-fadeUp card mt-8 max-w-xl p-2" style={{ "--reveal-delay": "270ms" } as React.CSSProperties}>
             <div className="flex gap-1 rounded-xl bg-neutral-100 p-1" role="tablist">
               <button
                 role="tab"
@@ -181,7 +181,7 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center gap-4">
+          <div className="animate-fadeUp mt-8 flex flex-wrap items-center gap-4" style={{ "--reveal-delay": "360ms" } as React.CSSProperties}>
             <a href="#cta" className="btn-yellow-lg">
               Get a Free Quote →
             </a>

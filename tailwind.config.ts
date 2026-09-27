@@ -21,7 +21,8 @@ const config: Config = {
       },
       fontFamily: {
         sans: [
-          "Inter",
+          "var(--font-inclusive)",
+          "Inclusive Sans",
           "ui-sans-serif",
           "system-ui",
           "-apple-system",

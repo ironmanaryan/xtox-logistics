@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Package, Ship, Truck, Wheat } from "lucide-react";
+import Reveal from "./Reveal";
 import { services } from "@/data/services";
 import type { LucideIcon } from "lucide-react";
 
@@ -35,18 +36,20 @@ export default function ServiceGrid() {
 
   return (
     <section id="services" className="section-pad py-20">
-      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
-        <div>
-          <p className="eyebrow">What we move</p>
-          <h2 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
-            Four divisions. One network.
-          </h2>
+      <Reveal>
+        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <p className="eyebrow">What we move</p>
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
+              Four divisions. One network.
+            </h2>
+          </div>
+          <p className="max-w-md text-sm text-muted">
+            Every division runs on the same tracking, billing and support stack —
+            so you scale with one partner, not four vendors.
+          </p>
         </div>
-        <p className="max-w-md text-sm text-muted">
-          Every division runs on the same tracking, billing and support stack —
-          so you scale with one partner, not four vendors.
-        </p>
-      </div>
+      </Reveal>
 
       <div
         ref={ref}

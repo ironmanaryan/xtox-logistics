@@ -2,15 +2,25 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown, LogIn, UserPlus, Newspaper, BookOpen, HelpCircle, PenLine } from "lucide-react";
 import Logo from "./Logo";
 import { services } from "@/data/services";
+
+const resources = [
+  { slug: "/resources/articles", label: "Articles", desc: "Guides on logistics & shipping", icon: Newspaper },
+  { slug: "/resources/case-studies", label: "Case Studies", desc: "Real results from real clients", icon: BookOpen },
+  { slug: "/resources/faq", label: "FAQ", desc: "Answers to common questions", icon: HelpCircle },
+  { slug: "/resources/blog", label: "Blog", desc: "News & industry updates", icon: PenLine },
+];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropOpen, setDropOpen] = useState(false);
+  const [resOpen, setResOpen] = useState(false);
   const pathname = usePathname();
+  const resTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -22,7 +32,16 @@ export default function Navbar() {
   useEffect(() => {
     setMobileOpen(false);
     setDropOpen(false);
+    setResOpen(false);
   }, [pathname]);
+
+  const openRes = () => {
+    if (resTimeout.current) clearTimeout(resTimeout.current);
+    setResOpen(true);
+  };
+  const closeRes = () => {
+    resTimeout.current = setTimeout(() => setResOpen(false), 120);
+  };
 
   const linkCls = (href: string) =>
     `text-sm font-semibold transition-colors duration-200 ${
@@ -35,12 +54,11 @@ export default function Navbar() {
         scrolled ? "border-line shadow-sm" : "border-transparent"
       }`}
     >
-      <nav className="section-pad flex h-16 items-center justify-between">
-        <Link href="/" aria-label="XtoX Logistics home" className="flex items-center">
-          <Logo variant="full" className="h-9 w-auto" />
-        </Link>
+      <nav className="section-pad flex h-20 items-center justify-between gap-4">
+        <Logo variant="full" className="h-14 w-auto" />
 
         <div className="hidden items-center gap-7 lg:flex">
+          {/* Services dropdown */}
           <div
             className="relative"
             onMouseEnter={() => setDropOpen(true)}
@@ -54,25 +72,15 @@ export default function Navbar() {
               onClick={() => setDropOpen((v) => !v)}
             >
               Services
-              <svg
+              <ChevronDown
                 className={`h-3.5 w-3.5 transition-transform duration-200 ${dropOpen ? "rotate-180" : ""}`}
-                viewBox="0 0 20 20"
-                fill="currentColor"
                 aria-hidden
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.06l3.71-3.83a.75.75 0 1 1 1.08 1.04l-4.25 4.39a.75.75 0 0 1-1.08 0L5.21 8.27a.75.75 0 0 1 .02-1.06Z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              />
             </button>
 
             <div
               className={`absolute left-1/2 top-full w-[560px] -translate-x-1/2 pt-3 transition-all duration-200 ${
-                dropOpen
-                  ? "visible translate-y-0 opacity-100"
-                  : "invisible -translate-y-1 opacity-0"
+                dropOpen ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0"
               }`}
             >
               <div className="grid grid-cols-2 gap-1 rounded-2xl border border-line bg-white p-2 shadow-hero">
@@ -84,6 +92,47 @@ export default function Navbar() {
                   >
                     <p className="text-sm font-bold text-brand-black">{s.name}</p>
                     <p className="mt-0.5 text-xs text-muted">{s.tagline}</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Resources dropdown */}
+          <div className="relative" onMouseEnter={openRes} onMouseLeave={closeRes}>
+            <button
+              type="button"
+              className="flex items-center gap-1 text-sm font-semibold text-muted transition-colors hover:text-brand-black"
+              aria-expanded={resOpen}
+              aria-haspopup="true"
+              onClick={() => setResOpen((v) => !v)}
+            >
+              Resources
+              <ChevronDown
+                className={`h-3.5 w-3.5 transition-transform duration-200 ${resOpen ? "rotate-180" : ""}`}
+                aria-hidden
+              />
+            </button>
+
+            <div
+              className={`absolute left-1/2 top-full w-80 -translate-x-1/2 pt-3 transition-all duration-200 ${
+                resOpen ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0"
+              }`}
+            >
+              <div className="flex flex-col gap-1 rounded-2xl border border-line bg-white p-2 shadow-hero">
+                {resources.map((r) => (
+                  <Link
+                    key={r.slug}
+                    href={r.slug}
+                    className="group flex items-center gap-3 rounded-xl p-3 transition-colors duration-200 hover:bg-neutral-50"
+                  >
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-yellow text-brand-black">
+                      <r.icon className="h-4 w-4" aria-hidden />
+                    </span>
+                    <span>
+                      <span className="block text-sm font-bold text-brand-black">{r.label}</span>
+                      <span className="block text-xs text-muted">{r.desc}</span>
+                    </span>
                   </Link>
                 ))}
               </div>
@@ -102,8 +151,16 @@ export default function Navbar() {
         </div>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Link href="/drivers" className="btn-primary !px-5 !py-2.5">
-            Become Driver Partner
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-2 rounded-xl border border-line bg-white px-5 py-2.5 text-sm font-semibold text-brand-black transition-all duration-300 hover:border-brand-black hover:bg-brand-black hover:text-white"
+          >
+            <LogIn className="h-4 w-4" aria-hidden />
+            Login
+          </Link>
+          <Link href="/signup" className="btn-primary !px-5 !py-2.5">
+            <UserPlus className="h-4 w-4" aria-hidden />
+            Sign Up
           </Link>
         </div>
 
@@ -127,7 +184,7 @@ export default function Navbar() {
       </nav>
 
       {mobileOpen && (
-        <div className="border-t border-line bg-white lg:hidden">
+        <div className="max-h-[80vh] overflow-y-auto border-t border-line bg-white lg:hidden">
           <div className="section-pad flex flex-col gap-1 py-4">
             <p className="eyebrow mb-1">Services</p>
             {services.map((s) => (
@@ -136,9 +193,26 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="my-2 h-px bg-line" />
-            <Link href="/drivers" className="btn-primary mt-1">
-              Become Driver Partner
+            <p className="eyebrow mb-1">Resources</p>
+            {resources.map((r) => (
+              <Link key={r.slug} href={r.slug} className="rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-neutral-50">
+                {r.label}
+              </Link>
+            ))}
+            <div className="my-2 h-px bg-line" />
+            <Link href="/drivers" className="rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-neutral-50">
+              Driver Partners
             </Link>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <Link href="/login" className="btn-secondary !px-3">
+                <LogIn className="h-4 w-4" aria-hidden />
+                Login
+              </Link>
+              <Link href="/signup" className="btn-primary !px-3">
+                <UserPlus className="h-4 w-4" aria-hidden />
+                Sign Up
+              </Link>
+            </div>
           </div>
         </div>
       )}
