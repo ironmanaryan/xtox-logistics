@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import ServiceLayout from "@/components/ServiceLayout";
 import ServiceCtaBand from "@/components/ServiceCtaBand";
 import { Truck, Zap, CalendarClock } from "lucide-react";
+import { images } from "@/data/images";
 
 export const metadata: Metadata = {
   title: "SME Transport Support",
@@ -64,6 +65,7 @@ export default function SmeTransportPage() {
           title="Your growth partner on"
           highlight="every lane."
           description="Whether it's one truck today or a contracted fleet every Monday — SMEs get enterprise-grade transport without enterprise overheads."
+          image={images.loadingDock}
         >
           {/* On-demand vs scheduled */}
           <div>

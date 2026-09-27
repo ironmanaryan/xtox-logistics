@@ -1,10 +1,21 @@
 import Link from "next/link";
+import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
+import { images } from "@/data/images";
 
 export default function DriverCta() {
   return (
     <section id="driver-cta" className="section-pad py-16">
       <div className="relative overflow-hidden rounded-3xl bg-brand-black px-8 py-12 text-white sm:px-12 lg:px-16">
+        <Image
+          src={images.truckSunset.src}
+          alt=""
+          fill
+          sizes="(min-width: 1024px) 100vw, 0px"
+          className="object-cover opacity-25"
+          aria-hidden
+        />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/80 to-brand-black/40" />
         <div
           aria-hidden
           className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-brand-yellow/20 blur-3xl"

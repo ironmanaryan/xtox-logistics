@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/services/sme-transport`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE}/services/agri-export`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE}/drivers`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/support`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/resources/articles`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE}/resources/case-studies`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/resources/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },

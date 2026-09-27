@@ -5,6 +5,7 @@ import ServiceLayout from "@/components/ServiceLayout";
 import ServiceCtaBand from "@/components/ServiceCtaBand";
 import PackersCalculator from "@/components/PackersCalculator";
 import { Package, ClipboardCheck, Layers, ShieldCheck, Truck } from "lucide-react";
+import { images } from "@/data/images";
 
 export const metadata: Metadata = {
   title: "Packers & Movers",
@@ -45,6 +46,7 @@ export default function PackersMoversPage() {
           title="Shifting homes or offices?"
           highlight="Move damage-free."
           description="From a 1BHK across town to a 400-seat office across states — trained crews, graded packing material and insured, GPS-tracked fleets on every move."
+          image={images.movingBoxes}
         >
           <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr]">
             <div>

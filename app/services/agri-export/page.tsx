@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import ServiceLayout from "@/components/ServiceLayout";
 import ServiceCtaBand from "@/components/ServiceCtaBand";
 import { Wheat, Snowflake, Warehouse, FileBarChart2, Leaf } from "lucide-react";
+import { images } from "@/data/images";
 
 export const metadata: Metadata = {
   title: "Farmer Agri-Export",
@@ -38,6 +39,7 @@ export default function AgriExportPage() {
           title="Your harvest deserves"
           highlight="global prices."
           description="Cold-chain from farm gate to foreign shelf, APEDA paperwork handled, and market intelligence that tells you exactly where your crop earns the most."
+          image={images.wheatField}
         >
           {/* Cold-chain section */}
           <div>

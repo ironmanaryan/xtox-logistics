@@ -104,6 +104,7 @@ export default function Footer() {
             <li><Link href="/#services" className="hover:text-brand-black">Why XtoX</Link></li>
             <li><Link href="/#industries" className="hover:text-brand-black">Industries</Link></li>
             <li><Link href="/drivers" className="hover:text-brand-black">Driver Partners</Link></li>
+            <li><Link href="/support" className="hover:text-brand-black">Customer Support</Link></li>
             <li><Link href="/#cta" className="hover:text-brand-black">Get a Quote</Link></li>
           </ul>
           <Link href="/#cta" className="btn-primary mt-5 !px-5 !py-2.5">

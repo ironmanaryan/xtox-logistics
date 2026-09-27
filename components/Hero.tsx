@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Truck, Package, Calculator, TruckElectric, Ship, Tractor } from "lucide-react";
 import { heroMetrics } from "@/data/metrics";
+import { images } from "@/data/images";
 
 type Tab = "track" | "rate";
 
@@ -192,8 +194,20 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right: floating metrics cluster */}
-        <div className="relative hidden min-h-[420px] lg:block" aria-hidden>
+        {/* Right: photo panel + floating metrics cluster */}
+        <div className="relative hidden min-h-[460px] lg:block">
+          <div className="absolute inset-x-4 bottom-12 top-2 overflow-hidden rounded-3xl border border-line shadow-hero">
+            <Image
+              src={images.truckHighway.src}
+              alt={images.truckHighway.alt}
+              fill
+              priority
+              sizes="(min-width: 1024px) 45vw, 0px"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+          </div>
+
           <div className="absolute right-10 top-2 w-64 animate-floatY rounded-2xl border border-line bg-white p-5 shadow-hero">
             <p className="eyebrow">Live network</p>
             <p className="mt-2 text-3xl font-extrabold">{heroMetrics[0].value}</p>

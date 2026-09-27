@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import ServiceLayout from "@/components/ServiceLayout";
 import ServiceCtaBand from "@/components/ServiceCtaBand";
 import { Ship, FileCheck2, Timer, Globe2, Warehouse } from "lucide-react";
+import { images } from "@/data/images";
 
 export const metadata: Metadata = {
   title: "Import / Export Assistance",
@@ -31,6 +32,7 @@ export default function ImportExportPage() {
           title="Customs, freight, paperwork —"
           highlight="fully handled."
           description="One EXIM desk for your imports and exports: classification, documentation, customs clearance and door delivery, with live milestone updates on every shipment."
+          image={images.containerCrane}
         >
           {/* Customs clearance roadmap */}
           <div>

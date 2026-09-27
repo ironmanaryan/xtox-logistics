@@ -145,6 +145,9 @@ export default function Navbar() {
           <Link href="/#industries" className={linkCls("/#industries")}>
             Industries
           </Link>
+          <Link href="/support" className={linkCls("/support")}>
+            Support
+          </Link>
           <Link href="/#cta" className={linkCls("/#cta")}>
             Get a Quote
           </Link>
@@ -202,6 +205,9 @@ export default function Navbar() {
             <div className="my-2 h-px bg-line" />
             <Link href="/drivers" className="rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-neutral-50">
               Driver Partners
+            </Link>
+            <Link href="/support" className="rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-neutral-50">
+              Customer Support
             </Link>
             <div className="mt-2 grid grid-cols-2 gap-2">
               <Link href="/login" className="btn-secondary !px-3">
