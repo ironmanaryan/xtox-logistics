@@ -24,6 +24,18 @@ export async function GET(req: Request) {
     .maybeSingle();
 
   if (error) {
+    // Table doesn't exist yet (DB schema not run) — degrade gracefully instead of a hard 500
+    const pgCode = (error as { code?: string }).code ?? "";
+    if (
+      pgCode === "PGRST205" ||
+      pgCode === "42P01" ||
+      /does not exist|schema cache/i.test(error.message)
+    ) {
+      return NextResponse.json(
+        { ok: false, error: "Tracking not available yet. Database is being set up." },
+        { status: 503 }
+      );
+    }
     console.error("track lookup error:", error.message);
     return NextResponse.json({ ok: false, error: "Lookup failed" }, { status: 500 });
   }

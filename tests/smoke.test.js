@@ -97,8 +97,9 @@ describe("project structure", () => {
   it("chat schema keeps admin access off the anon role", () => {
     const sql = fs.readFileSync(path.join(ROOT, "supabase", "chat-schema.sql"), "utf8");
     assert.match(sql, /enable row level security/);
-    // Visitor message inserts are constrained to sender = 'visitor'
-    assert.match(sql, /sender = 'visitor'/);
+    // All chat traffic goes through the Next.js server via the service-role key,
+    // so there must be NO anon policies on the chat tables.
+    assert.doesNotMatch(sql, /create policy/);
   });
 });
 

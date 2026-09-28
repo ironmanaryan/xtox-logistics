@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSupabase } from "@/lib/supabase";
+import { getSupabaseAdmin } from "@/lib/supabase";
 
 function badToken(token: unknown): token is undefined {
   return typeof token !== "string" || token.length < 8 || token.length > 100;
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "Message required" }, { status: 400 });
     }
 
-    const supabase = getSupabase();
+    const supabase = getSupabaseAdmin();
     if (!supabase) {
       return NextResponse.json({ ok: false, error: "Chat not configured yet" }, { status: 503 });
     }
@@ -105,7 +105,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ ok: false, error: "Invalid visitor token" }, { status: 400 });
   }
 
-  const supabase = getSupabase();
+  const supabase = getSupabaseAdmin();
   if (!supabase) {
     return NextResponse.json({ ok: false, error: "Chat not configured yet" }, { status: 503 });
   }

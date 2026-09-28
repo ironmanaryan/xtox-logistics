@@ -1,6 +1,6 @@
 -- XtoX Logistics — Live chat (customer ↔ admin)
 -- Run this in Supabase SQL Editor (after schema.sql).
--- Safe to re-run (idempotent).
+-- Idempotent: safe to re-run.
 
 create table if not exists public.chat_conversations (
   id uuid primary key default gen_random_uuid(),
@@ -28,34 +28,15 @@ create index if not exists idx_chat_conv_last on public.chat_conversations (last
 alter table public.chat_conversations enable row level security;
 alter table public.chat_messages enable row level security;
 
--- Visitors identify themselves only by their random visitor_token (a capability secret).
--- Token is generated client-side and kept in localStorage; without it a thread is unreadable.
-create policy "visitor manages own conversation"
-  on public.chat_conversations for all to anon
-  using (true)
-  with check (true);
+-- All chat reads/writes go through the Next.js server using the
+-- SUPABASE_SERVICE_ROLE_KEY (bypasses RLS):
+--   - visitors: POST/GET /api/chat (scoped by their random visitor_token)
+--   - admin:    /api/admin/* (protected by ADMIN_PASSWORD)
+-- So NO anon policies here on purpose — direct anon access is denied.
 
-create policy "visitor can read messages of conversation by token"
-  on public.chat_messages for select to anon
-  using (
-    exists (
-      select 1 from public.chat_conversations c
-      where c.id = chat_messages.conversation_id
-        and c.visitor_token = current_setting('request.headers', true)::json->>'x-visitor-token'
-    )
-  );
-
-create policy "visitor can send visitor-messages to own conversation"
-  on public.chat_messages for insert to anon
-  with check (
-    sender = 'visitor'
-    and exists (
-      select 1 from public.chat_conversations c
-      where c.id = chat_messages.conversation_id
-        and c.visitor_token = current_setting('request.headers', true)::json->>'x-visitor-token'
-    )
-  );
-
--- ADMIN reads/replies happen server-side through /api/admin/* routes using the
--- SUPABASE_SERVICE_ROLE_KEY (bypasses RLS). No anon admin policies on purpose.
--- Protect those routes by setting the ADMIN_PASSWORD env var on the server.
+-- Clean up policies from older versions of this file, if any:
+drop policy if exists "visitor full access to own conversation" on public.chat_conversations;
+drop policy if exists "visitor manages own conversation" on public.chat_conversations;
+drop policy if exists "visitor can read messages of conversation by token" on public.chat_messages;
+drop policy if exists "visitor can send messages to own conversation" on public.chat_messages;
+drop policy if exists "visitor can send visitor-messages to own conversation" on public.chat_messages;
