@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type MoveType = "1BHK" | "2BHK" | "3BHK" | "Villa" | "Office";
 
@@ -24,6 +24,21 @@ export default function PackersCalculator() {
   const [distance, setDistance] = useState("450");
   const [packing, setPacking] = useState(true);
   const [insurance, setInsurance] = useState(true);
+
+  // Pick up the home size chosen in the inquiry bar above (same page).
+  useEffect(() => {
+    const apply = (v: unknown) => {
+      if (typeof v === "string" && v in MOVE_BASE) setMoveType(v as MoveType);
+    };
+    try {
+      apply(sessionStorage.getItem("xtox-move-type"));
+    } catch {
+      /* ignore */
+    }
+    const onPick = (e: Event) => apply((e as CustomEvent).detail);
+    window.addEventListener("xtox:homesize", onPick);
+    return () => window.removeEventListener("xtox:homesize", onPick);
+  }, []);
 
   const estimate = useMemo(() => {
     const dist = Math.max(0, parseFloat(distance) || 0);
