@@ -148,14 +148,21 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/admin/auth")
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.ok) load();
-        else setAuthed(false);
-      })
-      .catch(() => setAuthed(false));
-  }, [load]);
+    // Always ask password on every visit/refresh: wipe any old session on mount,
+    // and clear it again when the tab closes.
+    fetch("/api/admin/auth", { method: "DELETE" })
+      .catch(() => {})
+      .finally(() => setAuthed(false));
+    const bye = () => {
+      try {
+        fetch("/api/admin/auth", { method: "DELETE", keepalive: true }).catch(() => {});
+      } catch {
+        /* ignore */
+      }
+    };
+    window.addEventListener("beforeunload", bye);
+    return () => window.removeEventListener("beforeunload", bye);
+  }, []);
 
   useEffect(() => {
     if (!authed) return;
