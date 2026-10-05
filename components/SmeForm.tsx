@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, IndianRupee } from "lucide-react";
 import { TRUCKS, GOODS_CATEGORIES } from "@/data/fleet";
+import DocPicker, { type PickedDoc } from "@/components/DocPicker";
 
 const LOADING_HELP = 800;
 const INSURANCE_RATE = 0.02;
@@ -27,7 +28,7 @@ export default function SmeForm({ mode }: { mode: "on-demand" | "contract" }) {
   const [distance, setDistance] = useState("250");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  const [truckKey, setTruckKey] = useState(TRUCKS[1].key);
+  const [truckKey, setTruckKey] = useState("dost-14ft");
   const [loadType, setLoadType] = useState<"FTL" | "PTL">("FTL");
   const [loadingHelp, setLoadingHelp] = useState(false);
   const [insurance, setInsurance] = useState(false);
@@ -41,6 +42,8 @@ export default function SmeForm({ mode }: { mode: "on-demand" | "contract" }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [docs, setDocs] = useState<PickedDoc[]>([]);
+  const [attached, setAttached] = useState(0);
 
   const truck = TRUCKS.find((t) => t.key === truckKey) ?? TRUCKS[0];
 
@@ -73,6 +76,22 @@ export default function SmeForm({ mode }: { mode: "on-demand" | "contract" }) {
       });
       const data = await res.json();
       if (!res.ok || !data.ok) throw new Error(data.error || "Something went wrong");
+
+      // Attach supporting documents (best-effort — quote is already saved)
+      try {
+        const valid = docs.filter((d) => !d.error && d.blob);
+        if (valid.length > 0) {
+          const fd = new FormData();
+          fd.append("ref", phone.trim());
+          fd.append("docType", "SME Supporting Document");
+          for (const d of valid) fd.append("files", d.blob as Blob, d.name);
+          const up = await fetch("/api/documents", { method: "POST", body: fd });
+          const ud = await up.json().catch(() => null);
+          if (up.ok && ud?.ok && Array.isArray(ud.files)) setAttached(ud.files.length);
+        }
+      } catch {
+        /* document upload is optional — ignore failures */
+      }
       setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -104,6 +123,11 @@ export default function SmeForm({ mode }: { mode: "on-demand" | "contract" }) {
             </>
           )}
         </p>
+        {attached > 0 && (
+          <p className="mt-2 text-sm font-bold text-green-700">
+            {attached} supporting document{attached === 1 ? "" : "s"} attached ✓
+          </p>
+        )}
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           {onDemand && (
             <Link href="/services/sme-transport/estimate" className="btn-primary">
@@ -287,6 +311,17 @@ export default function SmeForm({ mode }: { mode: "on-demand" | "contract" }) {
       <div className="mt-4">
         <label htmlFor={idp("notes")} className="label">Anything else? (optional)</label>
         <textarea id={idp("notes")} rows={2} className="input" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="e.g. fragile cartons, 2nd floor pickup without lift" />
+      </div>
+
+      <div className="mt-4">
+        <span className="label">Supporting documents (optional)</span>
+        <DocPicker
+          id={idp("docs")}
+          files={docs}
+          onChange={setDocs}
+          maxFiles={5}
+          hint="Invoice, LR copy or goods photos. Images auto-compress under 2 MB."
+        />
       </div>
 
       <button type="submit" disabled={loading} className="btn-primary mt-6 w-full disabled:opacity-60">

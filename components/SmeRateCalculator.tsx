@@ -9,7 +9,7 @@ const INSURANCE_RATE = 0.02;
 const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
 
 export default function SmeRateCalculator() {
-  const [truckKey, setTruckKey] = useState(TRUCKS[3].key);
+  const [truckKey, setTruckKey] = useState("sxl-32ft");
   const [distance, setDistance] = useState("600");
   const [loadType, setLoadType] = useState<"FTL" | "PTL">("FTL");
   const [loading, setLoading] = useState(false);

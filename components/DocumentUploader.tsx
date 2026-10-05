@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import { CheckCircle2, FileText, Upload, X } from "lucide-react";
-
-const MAX_BYTES = 2 * 1024 * 1024; // 2 MB hard limit
-const TARGET_BYTES = 1.9 * 1024 * 1024; // compress target
+import { MAX_BYTES, compressImage, fmtSize, isImageFile, isPdfFile } from "@/lib/compress-image";
 
 const DOC_TYPES = [
   "Commercial Invoice",
@@ -28,64 +26,7 @@ interface PickedFile {
   error: string | null;
 }
 
-const fmt = (n: number) =>
-  n >= 1024 * 1024 ? `${(n / 1024 / 1024).toFixed(2)} MB` : `${Math.round(n / 1024)} KB`;
-
-/** Compress an image file with canvas until it fits under TARGET_BYTES. */
-function compressImage(file: File): Promise<Blob> {
-  return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      if (!ctx) {
-        reject(new Error("Canvas not supported"));
-        return;
-      }
-      const tryDims = [1600, 1200, 900];
-      const qualities = [0.85, 0.7, 0.55, 0.4];
-      let di = 0;
-      let qi = 0;
-      const attempt = () => {
-        const maxDim = tryDims[di];
-        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
-        canvas.width = Math.round(img.width * scale);
-        canvas.height = Math.round(img.height * scale);
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob(
-          (blob) => {
-            if (!blob) {
-              reject(new Error("Compression failed"));
-              return;
-            }
-            if (blob.size <= TARGET_BYTES || (di === tryDims.length - 1 && qi === qualities.length - 1)) {
-              resolve(blob);
-            } else if (qi < qualities.length - 1) {
-              qi++;
-              attempt();
-            } else {
-              qi = 0;
-              di++;
-              attempt();
-            }
-          },
-          "image/jpeg",
-          qualities[qi]
-        );
-      };
-      attempt();
-    };
-    img.onerror = () => {
-      URL.revokeObjectURL(url);
-      reject(new Error("Could not read image"));
-    };
-    img.src = url;
-  });
-}
+const fmt = fmtSize;
 
 export default function DocumentUploader() {
   const [ref, setRef] = useState("");
@@ -102,8 +43,8 @@ export default function DocumentUploader() {
     const next: PickedFile[] = [];
     for (const file of Array.from(list)) {
       const id = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-      const isImage = /^image\/(jpeg|png|jpg)$/i.test(file.type);
-      const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+      const isImage = isImageFile(file);
+      const isPdf = isPdfFile(file);
       if (!isImage && !isPdf) {
         next.push({ id, name: file.name, originalSize: file.size, finalSize: file.size, compressed: false, blob: null, error: "Only PDF, JPG or PNG allowed" });
         continue;
