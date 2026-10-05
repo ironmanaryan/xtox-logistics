@@ -55,6 +55,7 @@ describe("project structure", () => {
       const src = fs.readFileSync(file, "utf8");
       const readsInput =
         src.includes("req.json()") ||
+        src.includes("formData") ||
         src.includes("searchParams") ||
         src.includes("sessionFromRequest") ||
         src.includes("req.headers");
@@ -167,6 +168,9 @@ describe("project structure", () => {
       "/services/packers-movers/estimate",
       "/services/packers-movers/express",
       "/services/import-export",
+      "/services/import-export/import",
+      "/services/import-export/export",
+      "/services/import-export/documents",
       "/services/sme-transport",
       "/services/agri-export",
       "/resources/articles",

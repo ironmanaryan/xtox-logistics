@@ -97,6 +97,13 @@ drop policy if exists "visitor can read messages of conversation by token" on pu
 drop policy if exists "visitor can send messages to own conversation" on public.chat_messages;
 drop policy if exists "visitor can send visitor-messages to own conversation" on public.chat_messages;
 
+-- ============ EXIM DOCUMENT STORAGE ============
+-- Uploads only via Next.js /api/documents with the service-role key
+-- (no anon policies — same pattern as chat tables).
+insert into storage.buckets (id, name, public)
+values ('exim-documents', 'exim-documents', false)
+on conflict (id) do nothing;
+
 -- ============ DEMO SHIPMENTS (seed) ============
 insert into public.shipments (tracking_code, origin, destination, status, current_location, eta_date)
 values
