@@ -228,6 +228,36 @@ export default function AdminPage() {
     }
   };
 
+  // ---------- Derived data (ALL hooks + computations BEFORE the early return —
+  // Rules of Hooks: same hook order on every render, logged-in or not) ----------
+  const newQuotes = quotes.filter((q) => q.status === "new");
+  const pendingDrivers = drivers.filter((d) => d.status === "pending");
+  const unread = convs.reduce((a, c) => a + (c.admin_unread > 0 ? 1 : 0), 0);
+
+  const groups = useMemo(() => ["All", ...Array.from(new Set(quotes.map((q) => serviceGroup(q.service))))], [quotes]);
+
+  const filteredQuotes = quotes.filter((q) => {
+    if (groupFilter !== "All" && serviceGroup(q.service) !== groupFilter) return false;
+    if (!search.trim()) return true;
+    const s = search.toLowerCase();
+    return [q.name, q.company ?? "", q.phone, q.from_city, q.to_city, q.service].some((f) => f.toLowerCase().includes(s));
+  });
+
+  const filteredDocs = docs.filter((d) => {
+    if (!search.trim()) return true;
+    const s = search.toLowerCase();
+    return d.ref.toLowerCase().includes(s) || d.name.toLowerCase().includes(s);
+  });
+
+  const docGroups = useMemo(() => {
+    const m = new Map<string, Doc[]>();
+    for (const d of filteredDocs) {
+      if (!m.has(d.ref)) m.set(d.ref, []);
+      m.get(d.ref)!.push(d);
+    }
+    return Array.from(m.entries());
+  }, [filteredDocs]);
+
   // ---------- Login gate ----------
   if (authed === null || authed === false) {
     return (
@@ -268,34 +298,7 @@ export default function AdminPage() {
   }
 
   // ---------- Dashboard ----------
-  const newQuotes = quotes.filter((q) => q.status === "new");
-  const pendingDrivers = drivers.filter((d) => d.status === "pending");
-  const unread = convs.reduce((a, c) => a + (c.admin_unread > 0 ? 1 : 0), 0);
   const activeMsgs = messages.filter((m) => m.conversation_id === activeConv);
-
-  const groups = useMemo(() => ["All", ...Array.from(new Set(quotes.map((q) => serviceGroup(q.service))))], [quotes]);
-
-  const filteredQuotes = quotes.filter((q) => {
-    if (groupFilter !== "All" && serviceGroup(q.service) !== groupFilter) return false;
-    if (!search.trim()) return true;
-    const s = search.toLowerCase();
-    return [q.name, q.company ?? "", q.phone, q.from_city, q.to_city, q.service].some((f) => f.toLowerCase().includes(s));
-  });
-
-  const filteredDocs = docs.filter((d) => {
-    if (!search.trim()) return true;
-    const s = search.toLowerCase();
-    return d.ref.toLowerCase().includes(s) || d.name.toLowerCase().includes(s);
-  });
-
-  const docGroups = useMemo(() => {
-    const m = new Map<string, Doc[]>();
-    for (const d of filteredDocs) {
-      if (!m.has(d.ref)) m.set(d.ref, []);
-      m.get(d.ref)!.push(d);
-    }
-    return Array.from(m.entries());
-  }, [filteredDocs]);
 
   return (
     <main className="min-h-screen bg-neutral-50">
