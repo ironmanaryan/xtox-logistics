@@ -33,7 +33,16 @@ export async function POST(req: Request) {
 
     if (error) {
       console.error("quote insert error:", error.message);
-      return NextResponse.json({ ok: false, error: "Failed to save request" }, { status: 500 });
+      const setupMissing = error.code === "PGRST205" || /schema cache/i.test(error.message ?? "");
+      return NextResponse.json(
+        {
+          ok: false,
+          error: setupMissing
+            ? "Booking system is being set up right now. Please try again in a while or reach us on WhatsApp — we will take your booking there."
+            : "Failed to save request",
+        },
+        { status: setupMissing ? 503 : 500 }
+      );
     }
 
     return NextResponse.json({ ok: true });

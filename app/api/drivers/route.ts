@@ -33,7 +33,16 @@ export async function POST(req: Request) {
 
     if (error) {
       console.error("driver insert error:", error.message);
-      return NextResponse.json({ ok: false, error: "Failed to save application" }, { status: 500 });
+      const setupMissing = error.code === "PGRST205" || /schema cache/i.test(error.message ?? "");
+      return NextResponse.json(
+        {
+          ok: false,
+          error: setupMissing
+            ? "Application system is being set up right now. Please try again in a while or reach us on WhatsApp."
+            : "Failed to save application",
+        },
+        { status: setupMissing ? 503 : 500 }
+      );
     }
 
     return NextResponse.json({ ok: true });
