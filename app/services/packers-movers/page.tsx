@@ -3,10 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ServiceCtaBand from "@/components/ServiceCtaBand";
-import PackersCalculator from "@/components/PackersCalculator";
-import PackersInquiryBar from "@/components/PackersInquiryBar";
-import TruckBookingWidget from "@/components/TruckBookingWidget";
 import { images } from "@/data/images";
 import {
   ClipboardList,
@@ -17,6 +13,7 @@ import {
   ShieldCheck,
   IndianRupee,
   Users,
+  Calculator,
   ArrowRight,
 } from "lucide-react";
 
@@ -25,6 +22,30 @@ export const metadata: Metadata = {
   description:
     "Stress-free house & office shifting with XtoX — instant quote, free survey, GST billing and GPS-tracked moves across India.",
 };
+
+const bookingCards = [
+  {
+    href: "/services/packers-movers/book",
+    icon: ClipboardList,
+    title: "Full Home Shifting",
+    desc: "Pickup, drop, date & home size — get a fixed quote with free video survey.",
+    meta: "Starting at ₹7,499",
+  },
+  {
+    href: "/services/packers-movers/estimate",
+    icon: Calculator,
+    title: "Cost Calculator",
+    desc: "Play with home size, distance, packing & insurance. Full GST breakup.",
+    meta: "Free • 30 seconds",
+  },
+  {
+    href: "/services/packers-movers/express",
+    icon: Truck,
+    title: "Express Truck Booking",
+    desc: "3-Wheeler, Tata Ace, 14ft Truck — fixed price, COD available, live GPS.",
+    meta: "Book in 4 steps",
+  },
+];
 
 const trustPoints = [
   {
@@ -80,7 +101,7 @@ const steps = [
 const faqs = [
   {
     q: "How is the cost calculated?",
-    a: "Move size, distance, packing material and insurance. The bar above gives an instant starting price and the calculator below a detailed range — final price is locked after the free survey.",
+    a: "Move size, distance, packing material and insurance. Open the cost calculator for an instant detailed range — final price is locked after the free survey.",
   },
   {
     q: "How much advance do I need to pay?",
@@ -109,7 +130,7 @@ export default function PackersMoversPage() {
     <>
       <Navbar />
       <main>
-        {/* ---------- Hero (Porter-style, XtoX theme) ---------- */}
+        {/* ---------- Hero ---------- */}
         <section className="relative overflow-hidden bg-brand-black text-white">
           <Image
             src={images.movingBoxes.src}
@@ -141,12 +162,41 @@ export default function PackersMoversPage() {
               Stress-free house shifting with XtoX Packers and Movers.
               Starting at <strong className="text-brand-yellow">₹7,499</strong>.
             </p>
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+              <Link href="/services/packers-movers/book" className="btn-primary !px-8 !py-4">
+                Get Free Quote
+                <ArrowRight className="h-4 w-4" aria-hidden />
+              </Link>
+              <Link
+                href="/services/packers-movers/express"
+                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/40 px-8 py-4 text-base font-bold text-white transition-all duration-300 hover:border-brand-yellow hover:bg-brand-yellow hover:text-brand-black"
+              >
+                <Truck className="h-5 w-5" aria-hidden />
+                Express Truck Booking
+              </Link>
+            </div>
           </div>
         </section>
 
-        {/* ---------- Inquiry bar overlapping hero ---------- */}
-        <div id="inquiry" className="section-pad relative z-10 -mt-20 scroll-mt-24 lg:-mt-24">
-          <PackersInquiryBar />
+        {/* ---------- Booking options (each opens its own page) ---------- */}
+        <div className="section-pad relative z-10 -mt-20 lg:-mt-24">
+          <div className="grid gap-4 md:grid-cols-3">
+            {bookingCards.map(({ href, icon: Icon, title, desc, meta }) => (
+              <Link key={href} href={href} className="card group p-6 sm:p-7">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-yellow text-brand-black transition-transform duration-300 group-hover:scale-110">
+                  <Icon className="h-6 w-6" aria-hidden />
+                </span>
+                <h2 className="mt-4 text-lg font-extrabold">{title}</h2>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">{desc}</p>
+                <p className="mt-3 flex items-center justify-between">
+                  <span className="chip-yellow">{meta}</span>
+                  <span className="inline-flex items-center gap-1 text-sm font-extrabold transition-transform duration-300 group-hover:translate-x-1">
+                    Open <ArrowRight className="h-4 w-4" aria-hidden />
+                  </span>
+                </p>
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* ---------- Trust badges ---------- */}
@@ -199,82 +249,55 @@ export default function PackersMoversPage() {
                 <div>
                   <p className="text-2xl font-extrabold text-brand-yellow">Ready?</p>
                   <p className="mt-2 text-sm leading-relaxed text-white/80">
-                    Check your starting price in 60 seconds — no OTP, no spam calls.
+                    Get your fixed quote in 60 seconds — no OTP, no spam calls.
                   </p>
                 </div>
-                <a href="#inquiry" className="btn-primary w-full">
+                <Link href="/services/packers-movers/book" className="btn-primary w-full">
                   Start my inquiry
                   <ArrowRight className="h-4 w-4" aria-hidden />
-                </a>
+                </Link>
               </li>
             </ol>
           </div>
         </section>
 
-        {/* ---------- Express truck booking ---------- */}
-        <section id="express" className="section-pad scroll-mt-24 py-14">
-          <p className="eyebrow">Express option</p>
-          <h2 className="mt-2 max-w-2xl text-2xl font-extrabold tracking-tight sm:text-3xl">
-            Only need a truck? Book in{" "}
-            <span className="bg-brand-yellow px-2">4 quick steps</span>
-          </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
-            Pick your vehicle — 3-Wheeler, Tata Ace, 14ft Truck or full BHK
-            shifting — see the fixed price upfront, add helpers if needed, and
-            track your truck live. No hidden charges, ever.
-          </p>
-          <div className="mt-8">
-            <TruckBookingWidget />
-          </div>
-        </section>
-
-        {/* ---------- Detailed calculator + FAQ ---------- */}
-        <section id="estimate" className="section-pad scroll-mt-24 py-14">
-          <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr]">
-            <div>
-              <p className="eyebrow">Detailed estimate</p>
-              <h2 className="mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl">
-                Fine-tune your moving cost
-              </h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-                Your home size from the inquiry above is carried over automatically.
-                Adjust distance, packing and insurance to see the full GST breakup —
-                the final locked price comes after your free survey.
-              </p>
-              <div className="mt-6 space-y-4">
-                {[
-                  "Free pre-move video survey",
-                  "GPS-tracked fleet on every move",
-                  "All-risk transit insurance available",
-                ].map((t) => (
-                  <div key={t} className="card flex items-center gap-4 p-5">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-yellow text-brand-black">
-                      <ShieldCheck className="h-5 w-5" aria-hidden />
-                    </span>
-                    <p className="text-sm font-bold">{t}</p>
-                  </div>
-                ))}
+        {/* ---------- FAQ ---------- */}
+        <section className="section-pad py-14">
+          <h2 className="text-2xl font-extrabold tracking-tight">Frequently asked</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {faqs.map((f) => (
+              <div key={f.q} className="card p-6">
+                <h3 className="font-bold">{f.q}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">{f.a}</p>
               </div>
-            </div>
-            <div>
-              <PackersCalculator />
-            </div>
-          </div>
-
-          <div className="mt-16">
-            <h2 className="text-2xl font-extrabold tracking-tight">Frequently asked</h2>
-            <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {faqs.map((f) => (
-                <div key={f.q} className="card p-6">
-                  <h3 className="font-bold">{f.q}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">{f.a}</p>
-                </div>
-              ))}
-            </div>
+            ))}
           </div>
         </section>
 
-        <ServiceCtaBand message="Planning a move? Lock your slot this week." />
+        {/* ---------- CTA ---------- */}
+        <section className="section-pad pb-20">
+          <div className="flex flex-col items-center justify-between gap-5 rounded-3xl bg-brand-black p-8 text-white sm:flex-row sm:p-10">
+            <div>
+              <h3 className="text-xl font-extrabold sm:text-2xl">
+                Planning a move? <span className="text-brand-yellow">Lock your slot this week.</span>
+              </h3>
+              <p className="mt-1.5 text-sm text-white/70">
+                Average response time: under 2 business hours.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/services/packers-movers/book" className="btn-primary">
+                Get a Quote
+              </Link>
+              <Link
+                href="/services/packers-movers/express"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:border-brand-yellow hover:text-brand-yellow"
+              >
+                Express booking
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </>

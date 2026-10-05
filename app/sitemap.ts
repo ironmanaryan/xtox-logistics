@@ -7,6 +7,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes: MetadataRoute.Sitemap = [
     { url: BASE, lastModified: now, changeFrequency: "weekly", priority: 1 },
     { url: `${BASE}/services/packers-movers`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${BASE}/services/packers-movers/book`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/services/packers-movers/estimate`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/services/packers-movers/express`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/services/import-export`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE}/services/sme-transport`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE}/services/agri-export`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
