@@ -75,16 +75,17 @@ export default function Hero() {
         loop
         playsInline
         preload="auto"
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover brightness-[1.08] contrast-[1.06] saturate-[1.2]"
         aria-hidden
       >
         <source src="/hero-logistics.mp4" type="video/mp4" />
       </video>
-      <div className="absolute inset-0 bg-black/60" aria-hidden />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/75" aria-hidden />
+      <div className="absolute inset-0 bg-black/45" aria-hidden />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/10 to-transparent" aria-hidden />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" aria-hidden />
 
       <div className="section-pad relative py-20 lg:py-28">
-        <div className="mx-auto max-w-3xl text-center">
+        <div className="max-w-2xl">
           <span className="chip-yellow animate-fadeUp">
             <Truck className="h-3.5 w-3.5" aria-hidden />
             India&apos;s emerging B2B logistics network
@@ -93,22 +94,22 @@ export default function Hero() {
             Logistics that moves
             <br />
             at the speed of{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10 text-brand-black">business.</span>
+            <span className="relative inline-block text-white">
+              business.
               <span
                 aria-hidden
-                className="absolute inset-x-0 bottom-1 z-0 h-3 -rotate-1 bg-brand-yellow"
+                className="absolute inset-x-0 -bottom-1 h-1.5 rounded-full bg-brand-yellow"
               />
             </span>
           </h1>
-          <p className="animate-fadeUp mx-auto mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg" style={{ "--reveal-delay": "180ms" } as React.CSSProperties}>
+          <p className="animate-fadeUp mt-6 max-w-xl text-base leading-relaxed text-white/85 sm:text-lg" style={{ "--reveal-delay": "180ms" } as React.CSSProperties}>
             Packers &amp; Movers, Import/Export clearance, SME transport and
             farmer-first agri-export — one partner, one dashboard, door to door.
           </p>
         </div>
 
         {/* Multi-tab search / tracking bar */}
-        <div className="animate-fadeUp card mx-auto mt-8 max-w-xl p-2 text-left" style={{ "--reveal-delay": "270ms" } as React.CSSProperties}>
+        <div className="animate-fadeUp card mt-8 max-w-xl p-2 text-left" style={{ "--reveal-delay": "270ms" } as React.CSSProperties}>
           <div className="flex gap-1 rounded-xl bg-neutral-100 p-1" role="tablist">
             <button
               role="tab"
@@ -195,7 +196,7 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="animate-fadeUp mt-8 flex flex-wrap items-center justify-center gap-4" style={{ "--reveal-delay": "360ms" } as React.CSSProperties}>
+        <div className="animate-fadeUp mt-8 flex flex-wrap items-center gap-4" style={{ "--reveal-delay": "360ms" } as React.CSSProperties}>
           <a href="#cta" className="btn-yellow-lg">
             Get a Free Quote →
           </a>
