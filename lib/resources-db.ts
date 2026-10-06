@@ -8,6 +8,7 @@ export interface DbResource {
   body: string;
   tag: string;
   extra: string;
+  image_url: string;
   published: boolean;
   created_at: string;
 }

@@ -29,12 +29,14 @@ export default async function CaseStudiesPage() {
     rows.length > 0
       ? rows.map((r) => {
           const { client, result } = parseExtra(r.extra);
-          return { key: r.id, title: r.title, excerpt: r.excerpt, industry: r.tag || "Logistics", client, result };
+          return { key: r.id, title: r.title, excerpt: r.excerpt, body: r.body, cover: r.image_url, industry: r.tag || "Logistics", client, result };
         })
       : fallback.map((c) => ({
           key: c.slug,
           title: c.title,
           excerpt: c.excerpt,
+          body: "",
+          cover: "",
           industry: c.industry,
           client: c.client,
           result: c.result,
@@ -52,7 +54,12 @@ export default async function CaseStudiesPage() {
         />
         <div className="section-pad grid gap-5 pb-20 md:grid-cols-2">
           {list.map((c) => (
-            <article key={c.key} className="card flex flex-col p-6">
+            <article key={c.key} className="card flex flex-col overflow-hidden">
+              {c.cover && (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={c.cover} alt={c.title} className="aspect-video w-full object-cover" loading="lazy" />
+              )}
+              <div className="flex flex-1 flex-col p-6">
               <div className="flex items-center gap-3 text-xs font-semibold text-muted">
                 <span className="flex items-center gap-1.5">
                   <Building2 className="h-3.5 w-3.5" aria-hidden /> {c.industry}
@@ -60,6 +67,14 @@ export default async function CaseStudiesPage() {
               </div>
               <h2 className="mt-4 text-lg font-extrabold leading-snug">{c.title}</h2>
               <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{c.excerpt}</p>
+              {c.body && (
+                <details className="group mt-3">
+                  <summary className="inline-flex cursor-pointer items-center gap-1 text-sm font-bold text-brand-black">
+                    Read full story
+                  </summary>
+                  <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-muted">{c.body}</p>
+                </details>
+              )}
               {c.result && (
                 <div className="mt-4 flex items-center gap-2 rounded-xl bg-neutral-50 px-4 py-3">
                   <TrendingUp className="h-4 w-4 shrink-0 text-brand-black" aria-hidden />
@@ -67,6 +82,7 @@ export default async function CaseStudiesPage() {
                 </div>
               )}
               {c.client && <p className="mt-3 text-xs text-muted">{c.client}</p>}
+              </div>
             </article>
           ))}
         </div>

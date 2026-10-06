@@ -11,6 +11,7 @@ interface Item {
   body?: string;
   tag?: string;
   extra?: string;
+  image_url?: string;
   published?: boolean;
 }
 
@@ -22,6 +23,7 @@ function clean(item: Item) {
     body: item.body ?? "",
     tag: item.tag ?? "",
     extra: item.extra ?? "",
+    image_url: item.image_url ?? "",
     published: item.published ?? true,
   };
 }
@@ -52,7 +54,7 @@ export async function POST(req: Request) {
   if (body.action === "update" && body.id && body.patch) {
     const patch: Record<string, unknown> = {};
     for (const [k, v] of Object.entries(body.patch)) {
-      if (["title", "excerpt", "body", "tag", "extra"].includes(k) && typeof v === "string") patch[k] = v;
+      if (["title", "excerpt", "body", "tag", "extra", "image_url"].includes(k) && typeof v === "string") patch[k] = v;
       if (k === "published" && typeof v === "boolean") patch[k] = v;
     }
     const { error } = await supabase.from("resources").update(patch).eq("id", body.id);

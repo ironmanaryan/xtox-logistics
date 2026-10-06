@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Truck, Package, Calculator, TruckElectric, Ship, Tractor } from "lucide-react";
 import { heroMetrics } from "@/data/metrics";
 import { images } from "@/data/images";
@@ -194,21 +193,25 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right: photo panel + floating metrics cluster */}
-        <div className="relative hidden min-h-[460px] lg:block">
-          <div className="absolute inset-x-4 bottom-12 top-2 overflow-hidden rounded-3xl border border-line shadow-hero">
-            <Image
-              src={images.truckHighway.src}
-              alt={images.truckHighway.alt}
-              fill
-              priority
-              sizes="(min-width: 1024px) 45vw, 0px"
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+        {/* Right: video panel + floating metrics cluster */}
+        <div className="relative min-h-[340px] sm:min-h-[420px] lg:min-h-[460px]">
+          <div className="absolute inset-x-0 bottom-0 top-0 overflow-hidden rounded-3xl border border-line shadow-hero lg:inset-x-4 lg:bottom-12 lg:top-2">
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              poster={images.truckHighway.src}
+              className="h-full w-full object-cover"
+              aria-label="XtoX logistics network — road, air, sea and rail cargo"
+            >
+              <source src="/hero-logistics.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
           </div>
 
-          <div className="absolute right-10 top-2 w-64 animate-floatY rounded-2xl border border-line bg-white p-5 shadow-hero">
+          <div className="absolute right-4 top-2 hidden w-64 animate-floatY rounded-2xl border border-line bg-white p-5 shadow-hero sm:right-10 lg:block">
             <p className="eyebrow">Live network</p>
             <p className="mt-2 text-3xl font-extrabold">{heroMetrics[0].value}</p>
             <p className="text-sm text-muted">{heroMetrics[0].label}</p>
@@ -217,7 +220,7 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="absolute left-2 top-36 w-60 animate-floatYSlow rounded-2xl border border-line bg-white p-5 shadow-hero">
+          <div className="absolute left-2 top-36 hidden w-60 animate-floatYSlow rounded-2xl border border-line bg-white p-5 shadow-hero lg:block">
             <p className="eyebrow">Fleet strength</p>
             <p className="mt-2 text-3xl font-extrabold">{heroMetrics[1].value}</p>
             <p className="text-sm text-muted">{heroMetrics[1].label}</p>
@@ -233,7 +236,7 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="absolute bottom-2 right-24 w-64 animate-floatY rounded-2xl border border-line bg-brand-black p-5 text-white shadow-hero [animation-delay:1.2s]">
+          <div className="absolute bottom-2 right-24 hidden w-64 animate-floatY rounded-2xl border border-line bg-brand-black p-5 text-white shadow-hero [animation-delay:1.2s] lg:block">
             <p className="text-xs font-bold uppercase tracking-widest text-brand-yellow">
               On-time delivery
             </p>

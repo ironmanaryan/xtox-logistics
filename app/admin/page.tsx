@@ -21,6 +21,7 @@ import {
   X,
 } from "lucide-react";
 import Logo from "@/components/Logo";
+import DocPicker, { type PickedDoc } from "@/components/DocPicker";
 
 interface Conv {
   id: string;
@@ -76,6 +77,7 @@ interface ResItem {
   body: string;
   tag: string;
   extra: string;
+  image_url: string;
   published: boolean;
   created_at: string;
 }
@@ -150,7 +152,9 @@ export default function AdminPage() {
   const [resources, setResources] = useState<ResItem[]>([]);
   const [contentKind, setContentKind] = useState("article");
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [form, setForm] = useState({ title: "", excerpt: "", body: "", tag: "", extra: "", extra2: "", published: true });
+  const [form, setForm] = useState({ title: "", excerpt: "", body: "", tag: "", extra: "", extra2: "", image_url: "", published: true });
+  const [coverFiles, setCoverFiles] = useState<PickedDoc[]>([]);
+  const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const threadRef = useRef<HTMLDivElement>(null);
 
@@ -264,7 +268,8 @@ export default function AdminPage() {
 
   const startNew = () => {
     setEditingId("new");
-    setForm({ title: "", excerpt: "", body: "", tag: "", extra: "", extra2: "", published: true });
+    setCoverFiles([]);
+    setForm({ title: "", excerpt: "", body: "", tag: "", extra: "", extra2: "", image_url: "", published: true });
   };
 
   const startEdit = (r: ResItem) => {
@@ -280,7 +285,8 @@ export default function AdminPage() {
         extra = r.extra;
       }
     }
-    setForm({ title: r.title, excerpt: r.excerpt, body: r.body, tag: r.tag, extra, extra2, published: r.published });
+    setForm({ title: r.title, excerpt: r.excerpt, body: r.body, tag: r.tag, extra, extra2, image_url: r.image_url ?? "", published: r.published });
+    setCoverFiles([]);
   };
 
   const saveContent = async (e: React.FormEvent) => {
@@ -288,7 +294,19 @@ export default function AdminPage() {
     if (!form.title.trim()) return;
     setSaving(true);
     try {
-      const payload = { ...form, extra: contentKind === "case-study" ? JSON.stringify({ client: form.extra2, result: form.extra }) : form.extra };
+      // Upload new cover first (if picked)
+      let image_url = form.image_url;
+      const cover = coverFiles.find((f) => !f.error && f.blob);
+      if (cover?.blob) {
+        setUploading(true);
+        const fd = new FormData();
+        fd.append("file", cover.blob, cover.name);
+        const up = await fetch("/api/admin/upload", { method: "POST", body: fd });
+        const ud = await up.json().catch(() => null);
+        if (up.ok && ud?.ok && ud.url) image_url = ud.url as string;
+        setUploading(false);
+      }
+      const payload = { ...form, image_url, extra: contentKind === "case-study" ? JSON.stringify({ client: form.extra2, result: form.extra }) : form.extra };
       const { extra2: _drop, ...item } = payload;
       const r = await fetch("/api/admin/content", {
         method: "POST",
@@ -768,6 +786,31 @@ export default function AdminPage() {
                   </div>
                   {contentKind !== "faq" && (
                     <div className="sm:col-span-2">
+                      <span className="label">Cover image (optional)</span>
+                      {form.image_url && coverFiles.length === 0 && (
+                        <div className="mb-2 flex items-center gap-3">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={form.image_url} alt="Cover preview" className="h-16 w-24 rounded-xl border border-line object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => setForm((f) => ({ ...f, image_url: "" }))}
+                            className="text-xs font-bold text-red-600 hover:underline"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      )}
+                      <DocPicker
+                        id="ct-cover"
+                        files={coverFiles}
+                        onChange={setCoverFiles}
+                        maxFiles={1}
+                        hint="JPG/PNG under 5 MB. Replaces the current cover on save."
+                      />
+                    </div>
+                  )}
+                  {contentKind !== "faq" && (
+                    <div className="sm:col-span-2">
                       <label className="label" htmlFor="ct-excerpt">Short summary</label>
                       <textarea id="ct-excerpt" rows={2} className="input" value={form.excerpt} onChange={(e) => setForm((f) => ({ ...f, excerpt: e.target.value }))} />
                     </div>
@@ -814,7 +857,7 @@ export default function AdminPage() {
                   Published (visible on website)
                 </label>
                 <button type="submit" disabled={saving} className="btn-primary mt-4 disabled:opacity-60">
-                  {saving ? "Saving…" : editingId === "new" ? "Publish" : "Save changes"}
+                  {uploading ? "Uploading image…" : saving ? "Saving…" : editingId === "new" ? "Publish" : "Save changes"}
                 </button>
               </form>
             )}
@@ -825,6 +868,10 @@ export default function AdminPage() {
                 .filter((r) => !search.trim() || r.title.toLowerCase().includes(search.toLowerCase()))
                 .map((r) => (
                   <div key={r.id} className={`card flex items-center gap-3 p-4 ${r.published ? "" : "opacity-70"}`}>
+                    {r.image_url && (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img src={r.image_url} alt="" className="h-12 w-16 shrink-0 rounded-lg border border-line object-cover" />
+                    )}
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-bold">
                         {r.title}

@@ -23,6 +23,8 @@ export default async function ArticlesPage() {
           key: r.id,
           title: r.title,
           excerpt: r.excerpt,
+          body: r.body,
+          cover: r.image_url,
           category: r.tag || "Guides",
           readTime: r.extra || "5 min read",
           date: fmtDate(r.created_at),
@@ -31,6 +33,8 @@ export default async function ArticlesPage() {
           key: a.slug,
           title: a.title,
           excerpt: a.excerpt,
+          body: "",
+          cover: "",
           category: a.category,
           readTime: a.readTime,
           date: a.date,
@@ -48,7 +52,12 @@ export default async function ArticlesPage() {
         />
         <div className="section-pad grid gap-5 pb-20 md:grid-cols-2">
           {list.map((a) => (
-            <article key={a.key} className="card flex flex-col p-6">
+            <article key={a.key} className="card flex flex-col overflow-hidden">
+              {a.cover && (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={a.cover} alt={a.title} className="aspect-video w-full object-cover" loading="lazy" />
+              )}
+              <div className="flex flex-1 flex-col p-6">
               <div className="flex items-center gap-3 text-xs font-semibold text-muted">
                 <span className="rounded-full bg-brand-yellow px-3 py-1 text-brand-black">{a.category}</span>
                 <span className="flex items-center gap-1">
@@ -60,10 +69,21 @@ export default async function ArticlesPage() {
               </div>
               <h2 className="mt-4 text-lg font-extrabold leading-snug">{a.title}</h2>
               <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{a.excerpt}</p>
-              <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-brand-black">
-                Read article
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
-              </span>
+              {a.body ? (
+                <details className="group mt-4">
+                  <summary className="inline-flex cursor-pointer items-center gap-1 text-sm font-bold text-brand-black">
+                    Read full story
+                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-open:rotate-90" aria-hidden />
+                  </summary>
+                  <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-muted">{a.body}</p>
+                </details>
+              ) : (
+                <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-brand-black">
+                  Read article
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
+                </span>
+              )}
+              </div>
             </article>
           ))}
         </div>

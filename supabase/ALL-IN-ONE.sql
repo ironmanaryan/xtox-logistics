@@ -113,9 +113,12 @@ create table if not exists public.resources (
   body text not null default '',
   tag text not null default '',
   extra text not null default '',
+  image_url text not null default '',
   published boolean not null default true,
   created_at timestamptz not null default now()
 );
+
+alter table public.resources add column if not exists image_url text not null default '';
 
 create index if not exists idx_resources_kind on public.resources (kind, created_at desc);
 
@@ -124,6 +127,15 @@ alter table public.resources enable row level security;
 drop policy if exists "public can view published resources" on public.resources;
 create policy "public can view published resources"
   on public.resources for select to anon using (published = true);
+
+-- ============ CONTENT COVER IMAGES (public bucket) ============
+insert into storage.buckets (id, name, public)
+values ('content-images', 'content-images', true)
+on conflict (id) do nothing;
+
+drop policy if exists "public can view content images" on storage.objects;
+create policy "public can view content images"
+  on storage.objects for select to anon using (bucket_id = 'content-images');
 
 -- ============ DEMO SHIPMENTS (seed) ============
 insert into public.shipments (tracking_code, origin, destination, status, current_location, eta_date)

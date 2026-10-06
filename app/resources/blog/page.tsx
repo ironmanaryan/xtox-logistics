@@ -19,8 +19,8 @@ export default async function BlogPage() {
   const rows = await getPublishedResources("blog");
   const posts =
     rows.length > 0
-      ? rows.map((r) => ({ key: r.id, title: r.title, excerpt: r.excerpt, tag: r.tag || "Blog", date: fmtDate(r.created_at) }))
-      : fallback.map((b) => ({ key: b.slug, title: b.title, excerpt: b.excerpt, tag: b.tag, date: b.date }));
+      ? rows.map((r) => ({ key: r.id, title: r.title, excerpt: r.excerpt, body: r.body, cover: r.image_url, tag: r.tag || "Blog", date: fmtDate(r.created_at) }))
+      : fallback.map((b) => ({ key: b.slug, title: b.title, excerpt: b.excerpt, body: "", cover: "", tag: b.tag, date: b.date }));
 
   const [featured, ...rest] = posts;
 
@@ -37,7 +37,12 @@ export default async function BlogPage() {
 
         <div className="section-pad pb-20">
           {featured && (
-            <article className="card p-8 lg:p-10">
+            <article className="card overflow-hidden">
+              {featured.cover && (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={featured.cover} alt={featured.title} className="aspect-[21/9] w-full object-cover" loading="lazy" />
+              )}
+              <div className="p-8 lg:p-10">
               <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-muted">
                 <span className="rounded-full bg-brand-yellow px-3 py-1 text-brand-black">{featured.tag}</span>
                 <span className="flex items-center gap-1">
@@ -49,12 +54,26 @@ export default async function BlogPage() {
                 {featured.title}
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">{featured.excerpt}</p>
+              {featured.body && (
+                <details className="group mt-4 max-w-2xl">
+                  <summary className="inline-flex cursor-pointer items-center gap-1 text-sm font-bold text-brand-black">
+                    Read full story
+                  </summary>
+                  <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-muted sm:text-base">{featured.body}</p>
+                </details>
+              )}
+              </div>
             </article>
           )}
 
           <div className="mt-6 grid gap-5 md:grid-cols-3">
             {rest.map((b) => (
-              <article key={b.key} className="card flex flex-col p-6">
+              <article key={b.key} className="card flex flex-col overflow-hidden">
+                {b.cover && (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img src={b.cover} alt={b.title} className="aspect-video w-full object-cover" loading="lazy" />
+                )}
+                <div className="flex flex-1 flex-col p-6">
                 <div className="flex items-center gap-3 text-xs font-semibold text-muted">
                   <span className="rounded-full bg-brand-yellow px-3 py-1 text-brand-black">{b.tag}</span>
                   <span className="flex items-center gap-1">
@@ -63,6 +82,15 @@ export default async function BlogPage() {
                 </div>
                 <h3 className="mt-4 font-extrabold leading-snug">{b.title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{b.excerpt}</p>
+                {b.body && (
+                  <details className="group mt-3">
+                    <summary className="inline-flex cursor-pointer items-center gap-1 text-sm font-bold text-brand-black">
+                      Read full story
+                    </summary>
+                    <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-muted">{b.body}</p>
+                  </details>
+                )}
+                </div>
               </article>
             ))}
           </div>
