@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Truck, Package, Calculator } from "lucide-react";
+import { images } from "@/data/images";
 
 type Tab = "track" | "rate";
 
@@ -75,6 +76,7 @@ export default function Hero() {
         loop
         playsInline
         preload="auto"
+        poster={images.truckHighway.src}
         className="absolute inset-0 h-full w-full object-cover brightness-[1.08] contrast-[1.06] saturate-[1.2]"
         aria-hidden
       >
