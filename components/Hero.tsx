@@ -83,11 +83,11 @@ export default function Hero() {
         <source src="/hero-logistics.mp4" type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-black/35" aria-hidden />
-      <div className="absolute inset-0 bg-gradient-to-l from-black/70 via-black/25 to-transparent" aria-hidden />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/25 to-transparent" aria-hidden />
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" aria-hidden />
 
       <div className="section-pad relative py-20 lg:py-28">
-        <div className="ml-auto max-w-2xl">
+        <div className="max-w-2xl">
           <span className="chip-yellow animate-fadeUp">
             <Truck className="h-3.5 w-3.5" aria-hidden />
             India&apos;s emerging B2B logistics network
