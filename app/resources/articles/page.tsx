@@ -4,7 +4,8 @@ import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Clock3 } from "lucide-react";
-import { articles } from "@/data/resources";
+import { articles as fallback } from "@/data/resources";
+import { getPublishedResources, fmtDate } from "@/lib/resources-db";
 
 export const metadata: Metadata = {
   title: "Articles",
@@ -12,7 +13,29 @@ export const metadata: Metadata = {
     "Practical guides on vehicle selection, customs documentation, damage-free moving and cold-chain logistics from the XtoX desk.",
 };
 
-export default function ArticlesPage() {
+export const revalidate = 60;
+
+export default async function ArticlesPage() {
+  const rows = await getPublishedResources("article");
+  const list =
+    rows.length > 0
+      ? rows.map((r) => ({
+          key: r.id,
+          title: r.title,
+          excerpt: r.excerpt,
+          category: r.tag || "Guides",
+          readTime: r.extra || "5 min read",
+          date: fmtDate(r.created_at),
+        }))
+      : fallback.map((a) => ({
+          key: a.slug,
+          title: a.title,
+          excerpt: a.excerpt,
+          category: a.category,
+          readTime: a.readTime,
+          date: a.date,
+        }));
+
   return (
     <>
       <Navbar />
@@ -24,8 +47,8 @@ export default function ArticlesPage() {
           description="No fluff — field-tested playbooks on shipping, moving and exporting from India."
         />
         <div className="section-pad grid gap-5 pb-20 md:grid-cols-2">
-          {articles.map((a) => (
-            <article key={a.slug} className="card flex flex-col p-6">
+          {list.map((a) => (
+            <article key={a.key} className="card flex flex-col p-6">
               <div className="flex items-center gap-3 text-xs font-semibold text-muted">
                 <span className="rounded-full bg-brand-yellow px-3 py-1 text-brand-black">{a.category}</span>
                 <span className="flex items-center gap-1">

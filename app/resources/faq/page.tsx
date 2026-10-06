@@ -3,7 +3,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import { ChevronDown } from "lucide-react";
-import { faqCategories } from "@/data/resources";
+import { faqCategories as fallback } from "@/data/resources";
+import { getPublishedResources } from "@/lib/resources-db";
 
 export const metadata: Metadata = {
   title: "FAQ",
@@ -11,7 +12,23 @@ export const metadata: Metadata = {
     "Answers to common questions about XtoX services: packers & movers, import/export, SME transport, agri-export and driver partnerships.",
 };
 
-export default function FaqPage() {
+export const revalidate = 60;
+
+export default async function FaqPage() {
+  const rows = await getPublishedResources("faq");
+  const cats =
+    rows.length > 0
+      ? Array.from(
+          rows.reduce((m, r) => {
+            const name = r.tag || "General";
+            if (!m.has(name)) m.set(name, []);
+            m.get(name)!.push({ q: r.title, a: r.body });
+            return m;
+          }, new Map<string, { q: string; a: string }[]>()),
+          ([name, items]) => ({ name, items })
+        )
+      : fallback;
+
   return (
     <>
       <Navbar />
@@ -23,7 +40,7 @@ export default function FaqPage() {
           description="Can't find what you're looking for? Our desk replies within 2 business hours."
         />
         <div className="section-pad max-w-3xl pb-20">
-          {faqCategories.map((cat) => (
+          {cats.map((cat) => (
             <section key={cat.name} className="mt-10 first:mt-0">
               <h2 className="text-xl font-extrabold tracking-tight">{cat.name}</h2>
               <div className="mt-4 space-y-3">

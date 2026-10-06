@@ -42,10 +42,17 @@ export async function GET(req: Request) {
         .order("created_at", { ascending: true })
     : { data: [] };
 
+  const { data: resources } = await supabase
+    .from("resources")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(200);
+
   // Uploaded EXIM/SME/Agri documents (private bucket → signed URLs valid 1 hr)
   let documents: {
     ref: string;
     name: string;
+    path: string;
     size: number;
     created: string | null;
     url: string;
@@ -63,6 +70,7 @@ export async function GET(req: Request) {
           documents.push({
             ref: dir.name,
             name: f.name.replace(/^\d+-/, ""),
+            path,
             size: (f.metadata as { size?: number }).size ?? 0,
             created: (f as { created_at?: string }).created_at ?? null,
             url: signed.signedUrl,
@@ -83,5 +91,6 @@ export async function GET(req: Request) {
     quotes: quotes.data ?? [],
     drivers: drivers.data ?? [],
     documents,
+    resources: resources ?? [],
   });
 }

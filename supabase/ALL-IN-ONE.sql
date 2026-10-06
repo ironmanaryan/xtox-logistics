@@ -104,6 +104,27 @@ insert into storage.buckets (id, name, public)
 values ('exim-documents', 'exim-documents', false)
 on conflict (id) do nothing;
 
+-- ============ RESOURCES CMS ============
+create table if not exists public.resources (
+  id uuid primary key default gen_random_uuid(),
+  kind text not null check (kind in ('article', 'case-study', 'faq', 'blog')),
+  title text not null,
+  excerpt text not null default '',
+  body text not null default '',
+  tag text not null default '',
+  extra text not null default '',
+  published boolean not null default true,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists idx_resources_kind on public.resources (kind, created_at desc);
+
+alter table public.resources enable row level security;
+
+drop policy if exists "public can view published resources" on public.resources;
+create policy "public can view published resources"
+  on public.resources for select to anon using (published = true);
+
 -- ============ DEMO SHIPMENTS (seed) ============
 insert into public.shipments (tracking_code, origin, destination, status, current_location, eta_date)
 values

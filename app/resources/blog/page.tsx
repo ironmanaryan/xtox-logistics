@@ -4,7 +4,8 @@ import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import Link from "next/link";
 import { CalendarDays } from "lucide-react";
-import { blogPosts } from "@/data/resources";
+import { blogPosts as fallback } from "@/data/resources";
+import { getPublishedResources, fmtDate } from "@/lib/resources-db";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -12,8 +13,16 @@ export const metadata: Metadata = {
     "News, operations playbooks and industry analysis from XtoX Logistics — monsoon shipping, APEDA updates, GST explainers and more.",
 };
 
-export default function BlogPage() {
-  const [featured, ...rest] = blogPosts;
+export const revalidate = 60;
+
+export default async function BlogPage() {
+  const rows = await getPublishedResources("blog");
+  const posts =
+    rows.length > 0
+      ? rows.map((r) => ({ key: r.id, title: r.title, excerpt: r.excerpt, tag: r.tag || "Blog", date: fmtDate(r.created_at) }))
+      : fallback.map((b) => ({ key: b.slug, title: b.title, excerpt: b.excerpt, tag: b.tag, date: b.date }));
+
+  const [featured, ...rest] = posts;
 
   return (
     <>
@@ -27,23 +36,25 @@ export default function BlogPage() {
         />
 
         <div className="section-pad pb-20">
-          <article className="card p-8 lg:p-10">
-            <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-muted">
-              <span className="rounded-full bg-brand-yellow px-3 py-1 text-brand-black">{featured.tag}</span>
-              <span className="flex items-center gap-1">
-                <CalendarDays className="h-3.5 w-3.5" aria-hidden /> {featured.date}
-              </span>
-              <span>Featured</span>
-            </div>
-            <h2 className="mt-4 max-w-2xl text-2xl font-extrabold leading-snug sm:text-3xl">
-              {featured.title}
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">{featured.excerpt}</p>
-          </article>
+          {featured && (
+            <article className="card p-8 lg:p-10">
+              <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-muted">
+                <span className="rounded-full bg-brand-yellow px-3 py-1 text-brand-black">{featured.tag}</span>
+                <span className="flex items-center gap-1">
+                  <CalendarDays className="h-3.5 w-3.5" aria-hidden /> {featured.date}
+                </span>
+                <span>Featured</span>
+              </div>
+              <h2 className="mt-4 max-w-2xl text-2xl font-extrabold leading-snug sm:text-3xl">
+                {featured.title}
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">{featured.excerpt}</p>
+            </article>
+          )}
 
           <div className="mt-6 grid gap-5 md:grid-cols-3">
             {rest.map((b) => (
-              <article key={b.slug} className="card flex flex-col p-6">
+              <article key={b.key} className="card flex flex-col p-6">
                 <div className="flex items-center gap-3 text-xs font-semibold text-muted">
                   <span className="rounded-full bg-brand-yellow px-3 py-1 text-brand-black">{b.tag}</span>
                   <span className="flex items-center gap-1">
