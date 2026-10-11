@@ -27,7 +27,12 @@ export default function DriverCta() {
 
         <div className="relative grid items-center gap-8 lg:grid-cols-[1.4fr_1fr]">
           <div>
-            <span className="chip-yellow">Drive with XtoX</span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="chip-yellow">Drive with XtoX</span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-green-400 px-3 py-1 text-xs font-extrabold text-brand-black">
+                Zero commission on first 10 trips
+              </span>
+            </div>
             <h2 className="mt-4 text-3xl font-extrabold leading-tight sm:text-4xl">
               Own a truck? Turn it into a
               <span className="text-brand-yellow"> money machine.</span>
@@ -66,8 +71,8 @@ export default function DriverCta() {
                 Get first load offer
               </li>
             </ol>
-            <Link href="/drivers" className="btn-yellow-lg mt-6 w-full">
-              Start Onboarding →
+            <Link href="/drivers" className="btn-yellow-lg mt-6 w-full !px-8 !py-4 !text-lg">
+              Start Earning Today →
             </Link>
           </div>
         </div>

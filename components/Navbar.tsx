@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, LogIn, UserPlus, Newspaper, BookOpen, HelpCircle, PenLine } from "lucide-react";
+import { ChevronDown, LogIn, UserPlus, Newspaper, BookOpen, HelpCircle, PenLine, ArrowRight } from "lucide-react";
 import Logo from "./Logo";
 import { services } from "@/data/services";
 
@@ -153,17 +153,16 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-5 lg:flex">
           <Link
             href="/login"
-            className="inline-flex items-center gap-2 rounded-xl border border-line bg-white px-5 py-2.5 text-sm font-semibold text-brand-black transition-all duration-300 hover:border-brand-black hover:bg-brand-black hover:text-white"
+            className="text-sm font-semibold text-muted transition-colors hover:text-brand-black"
           >
-            <LogIn className="h-4 w-4" aria-hidden />
             Login
           </Link>
-          <Link href="/signup" className="btn-primary !px-5 !py-2.5">
-            <UserPlus className="h-4 w-4" aria-hidden />
-            Sign Up
+          <Link href="/#cta" className="btn-primary !px-6 !py-2.5">
+            Get Quote
+            <ArrowRight className="h-4 w-4" aria-hidden />
           </Link>
         </div>
 

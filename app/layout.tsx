@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inclusive_Sans } from "next/font/google";
 import ChatWidget from "@/components/ChatWidget";
+import { WhatsAppFloat, MobileCallBar } from "@/components/FloatingActions";
 import "./globals.css";
 
 const inclusiveSans = Inclusive_Sans({
@@ -35,6 +36,9 @@ export default function RootLayout({
       <body className="min-h-screen bg-white text-brand-black antialiased">
         {children}
         <ChatWidget />
+        <WhatsAppFloat />
+        <MobileCallBar />
+        <div aria-hidden className="h-[57px] sm:hidden" />
       </body>
     </html>
   );

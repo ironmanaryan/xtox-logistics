@@ -32,20 +32,20 @@ const resources = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-line bg-white">
+    <footer className="bg-brand-black text-white">
       <div className="section-pad grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
           <Logo variant="full" className="h-16 w-auto" />
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/60">
             One logistics partner for businesses, families, SMEs and farmers —
             moving India&apos;s goods X to X, door to door.
           </p>
-          <div className="mt-5 flex flex-col gap-1.5 text-sm text-muted">
-            <a href="tel:+917875488307" className="flex items-center gap-2 hover:text-brand-black">
+          <div className="mt-5 flex flex-col gap-1.5 text-sm text-white/70">
+            <a href="tel:+917875488307" className="flex items-center gap-2 hover:text-brand-yellow">
               <Phone className="h-4 w-4 shrink-0" aria-hidden />
               +91 78754 88307
             </a>
-            <a href="mailto:xtoxlogistics.info@gmail.com" className="flex items-center gap-2 hover:text-brand-black">
+            <a href="mailto:xtoxlogistics.info@gmail.com" className="flex items-center gap-2 hover:text-brand-yellow">
               <Mail className="h-4 w-4 shrink-0" aria-hidden />
               xtoxlogistics.info@gmail.com
             </a>
@@ -56,7 +56,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="XtoX Logistics on Instagram"
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-line text-muted transition-all duration-300 hover:border-brand-black hover:bg-brand-black hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 text-white/70 transition-all duration-300 hover:border-brand-yellow hover:bg-brand-yellow hover:text-brand-black"
             >
               <InstagramIcon className="h-4 w-4" />
             </a>
@@ -65,7 +65,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="XtoX Logistics on LinkedIn"
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-line text-muted transition-all duration-300 hover:border-brand-black hover:bg-brand-black hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 text-white/70 transition-all duration-300 hover:border-brand-yellow hover:bg-brand-yellow hover:text-brand-black"
             >
               <LinkedinIcon className="h-4 w-4" />
             </a>
@@ -73,11 +73,11 @@ export default function Footer() {
         </div>
 
         <div>
-          <p className="text-sm font-bold uppercase tracking-wider">Services</p>
-          <ul className="mt-4 space-y-2.5 text-sm text-muted">
+          <p className="text-sm font-bold uppercase tracking-wider text-white">Services</p>
+          <ul className="mt-4 space-y-2.5 text-sm text-white/60">
             {services.map((s) => (
               <li key={s.key}>
-                <Link href={s.slug} className="transition-colors hover:text-brand-black">
+                <Link href={s.slug} className="transition-colors hover:text-brand-yellow">
                   {s.name}
                 </Link>
               </li>
@@ -86,11 +86,11 @@ export default function Footer() {
         </div>
 
         <div>
-          <p className="text-sm font-bold uppercase tracking-wider">Resources</p>
-          <ul className="mt-4 space-y-2.5 text-sm text-muted">
+          <p className="text-sm font-bold uppercase tracking-wider text-white">Resources</p>
+          <ul className="mt-4 space-y-2.5 text-sm text-white/60">
             {resources.map((r) => (
               <li key={r.href}>
-                <Link href={r.href} className="transition-colors hover:text-brand-black">
+                <Link href={r.href} className="transition-colors hover:text-brand-yellow">
                   {r.label}
                 </Link>
               </li>
@@ -99,13 +99,13 @@ export default function Footer() {
         </div>
 
         <div>
-          <p className="text-sm font-bold uppercase tracking-wider">Company</p>
-          <ul className="mt-4 space-y-2.5 text-sm text-muted">
-            <li><Link href="/#services" className="hover:text-brand-black">Why XtoX</Link></li>
-            <li><Link href="/#industries" className="hover:text-brand-black">Industries</Link></li>
-            <li><Link href="/drivers" className="hover:text-brand-black">Driver Partners</Link></li>
-            <li><Link href="/support" className="hover:text-brand-black">Customer Support</Link></li>
-            <li><Link href="/#cta" className="hover:text-brand-black">Get a Quote</Link></li>
+          <p className="text-sm font-bold uppercase tracking-wider text-white">Company</p>
+          <ul className="mt-4 space-y-2.5 text-sm text-white/60">
+            <li><Link href="/#services" className="hover:text-brand-yellow">Why XtoX</Link></li>
+            <li><Link href="/#industries" className="hover:text-brand-yellow">Industries</Link></li>
+            <li><Link href="/drivers" className="hover:text-brand-yellow">Driver Partners</Link></li>
+            <li><Link href="/support" className="hover:text-brand-yellow">Customer Support</Link></li>
+            <li><Link href="/#cta" className="hover:text-brand-yellow">Get a Quote</Link></li>
           </ul>
           <Link href="/#cta" className="btn-primary mt-5 !px-5 !py-2.5">
             Request a Quote
@@ -113,8 +113,8 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-line">
-        <div className="section-pad flex flex-col items-center justify-between gap-2 py-5 text-xs text-muted sm:flex-row">
+      <div className="border-t border-white/10">
+        <div className="section-pad flex flex-col items-center justify-between gap-2 py-5 text-xs text-white/50 sm:flex-row">
           <p>© {new Date().getFullYear()} XtoX Logistics. All rights reserved.</p>
           <p>Moving India&apos;s goods — X to X.</p>
         </div>

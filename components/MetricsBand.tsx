@@ -32,10 +32,14 @@ function useCountUp(target: string, active: boolean) {
 
 function Metric({ value, label, active }: { value: string; label: string; active: boolean }) {
   const shown = useCountUp(value, active);
+  const match = shown.match(/^([\d.]+)(.*)$/);
   return (
     <div className="flex flex-col items-center text-center">
-      <p className="text-3xl font-extrabold tracking-tight sm:text-4xl">{shown}</p>
-      <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-muted">{label}</p>
+      <p className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+        {match ? match[1] : shown}
+        {match && match[2] ? <span className="text-brand-yellow">{match[2]}</span> : null}
+      </p>
+      <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-white/60">{label}</p>
     </div>
   );
 }
@@ -61,8 +65,8 @@ export default function MetricsBand() {
   }, []);
 
   return (
-    <section className="border-y border-line bg-white">
-      <div ref={ref} className="section-pad grid grid-cols-2 gap-6 py-10 lg:grid-cols-4">
+    <section className="bg-brand-black">
+      <div ref={ref} className="section-pad grid grid-cols-2 gap-8 py-12 lg:grid-cols-4">
         {heroMetrics.map((m) => (
           <Metric key={m.label} value={m.value} label={m.label} active={active} />
         ))}
