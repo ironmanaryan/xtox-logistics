@@ -30,6 +30,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/resources/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE}/login`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${BASE}/signup`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE}/dashboard`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
+    { url: `${BASE}/driver`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
   ];
   return routes;
 }

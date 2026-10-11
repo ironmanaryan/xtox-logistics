@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { services } from "@/data/services";
+import { useAuthUserId } from "@/lib/use-auth-user";
 
 export default function QuoteForm() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const userId = useAuthUserId();
   const [form, setForm] = useState({
     name: "",
     company: "",
@@ -30,7 +32,7 @@ export default function QuoteForm() {
       const res = await fetch("/api/quote", {
         method: "POST",
       headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, userId }),
       });
       const data = await res.json();
       if (!res.ok || !data.ok) {

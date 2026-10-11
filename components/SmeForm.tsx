@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, IndianRupee } from "lucide-react";
 import { TRUCKS, GOODS_CATEGORIES } from "@/data/fleet";
 import DocPicker, { type PickedDoc } from "@/components/DocPicker";
+import { useAuthUserId } from "@/lib/use-auth-user";
 
 const LOADING_HELP = 800;
 const INSURANCE_RATE = 0.02;
@@ -44,6 +45,7 @@ export default function SmeForm({ mode }: { mode: "on-demand" | "contract" }) {
   const [submitted, setSubmitted] = useState(false);
   const [docs, setDocs] = useState<PickedDoc[]>([]);
   const [attached, setAttached] = useState(0);
+  const userId = useAuthUserId();
 
   const truck = TRUCKS.find((t) => t.key === truckKey) ?? TRUCKS[0];
 
@@ -72,7 +74,7 @@ export default function SmeForm({ mode }: { mode: "on-demand" | "contract" }) {
       const res = await fetch("/api/quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, company, service, phone, from: fromCity, to: toCity, details }),
+        body: JSON.stringify({ name, company, service, phone, from: fromCity, to: toCity, details, userId }),
       });
       const data = await res.json();
       if (!res.ok || !data.ok) throw new Error(data.error || "Something went wrong");

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { useAuthUserId } from "@/lib/use-auth-user";
 
 type HomeSize = "1BHK" | "2BHK" | "3BHK" | "Villa" | "Office";
 
@@ -21,6 +22,7 @@ function todayISO(): string {
 }
 
 export default function PackersQuoteForm() {
+  const userId = useAuthUserId();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [pickup, setPickup] = useState("");
@@ -52,6 +54,7 @@ export default function PackersQuoteForm() {
           from: pickup,
           to: drop,
           details: `Shifting date: ${date} | Home size: ${homeSize}${details ? ` | Notes: ${details}` : ""}`,
+          userId,
         }),
       });
       const data = await res.json();

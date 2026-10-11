@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Loader2, LogOut, User } from "lucide-react";
+import { Loader2, LogOut, Truck, User } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getSupabaseBrowser } from "@/lib/supabase-browser";
@@ -61,7 +61,10 @@ export default function AccountPage() {
             <h1 className="mt-4 text-xl font-extrabold">My account</h1>
             <p className="mt-1 text-sm text-muted">{email}</p>
             <div className="mt-6 grid gap-2">
-              <Link href="/#cta" className="btn-primary w-full">Request a quote</Link>
+              <Link href="/dashboard" className="btn-primary w-full">Open my dashboard</Link>
+              <Link href="/driver" className="btn-secondary w-full">
+                <Truck className="h-4 w-4" aria-hidden /> Driver app
+              </Link>
               <button type="button" onClick={logout} className="btn-secondary w-full">
                 <LogOut className="h-4 w-4" aria-hidden /> Log out
               </button>

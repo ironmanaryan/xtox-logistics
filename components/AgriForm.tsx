@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, IndianRupee } from "lucide-react";
+import { useAuthUserId } from "@/lib/use-auth-user";
 import { CROPS, GOVT_DOCS, DEST_COUNTRIES, inr } from "@/data/agri";
 import DocPicker, { type PickedDoc } from "@/components/DocPicker";
 
@@ -33,6 +34,7 @@ export default function AgriForm({ mode }: { mode: "export" | "govt-docs" }) {
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [attached, setAttached] = useState(0);
+  const userId = useAuthUserId();
 
   const crop = CROPS.find((c) => c.key === cropKey) ?? CROPS[0];
 
@@ -82,6 +84,7 @@ export default function AgriForm({ mode }: { mode: "export" | "govt-docs" }) {
           from: `${village}, ${district}`,
           to: isExport ? dest : "APEDA / DGFT filing",
           details,
+          userId,
         }),
       });
       const data = await res.json();

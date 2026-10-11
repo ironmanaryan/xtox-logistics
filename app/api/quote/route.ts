@@ -4,7 +4,7 @@ import { getSupabase } from "@/lib/supabase";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, company, service, phone, from, to, details } = body ?? {};
+    const { name, company, service, phone, from, to, details, userId } = body ?? {};
 
     if (!name || !service || !phone || !from || !to) {
       return NextResponse.json(
@@ -21,6 +21,9 @@ export async function POST(req: Request) {
       );
     }
 
+    const cleanUserId =
+      typeof userId === "string" && /^[0-9a-f-]{36}$/i.test(userId) ? userId : null;
+
     const { error } = await supabase.from("quote_requests").insert({
       name,
       company: company || null,
@@ -29,6 +32,7 @@ export async function POST(req: Request) {
       from_city: from,
       to_city: to,
       cargo_details: details || null,
+      user_id: cleanUserId,
     });
 
     if (error) {

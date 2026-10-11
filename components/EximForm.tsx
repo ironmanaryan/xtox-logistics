@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Globe2, MapPin } from "lucide-react";
+import { useAuthUserId } from "@/lib/use-auth-user";
 
 type Scope = "international" | "domestic";
 
@@ -61,6 +62,7 @@ export default function EximForm({ mode }: { mode: "import" | "export" }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const userId = useAuthUserId();
 
   const countryLabel = isImport ? "Origin country" : "Destination country";
 
@@ -99,7 +101,7 @@ export default function EximForm({ mode }: { mode: "import" | "export" }) {
       const res = await fetch("/api/quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, company, service, phone, from, to, details: bits.join(" | ") }),
+        body: JSON.stringify({ name, company, service, phone, from, to, details: bits.join(" | "), userId }),
       });
       const data = await res.json();
       if (!res.ok || !data.ok) throw new Error(data.error || "Something went wrong");

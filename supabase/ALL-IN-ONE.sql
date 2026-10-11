@@ -144,3 +144,41 @@ values
   ('XTX789012', 'Nashik, MH', 'Dubai (Jebel Ali)', 'out_for_delivery', 'Jebel Ali customs', current_date + 1),
   ('XTX345678', 'Nashik, MH', 'Rotterdam, NL', 'delivered', 'Rotterdam DC', current_date - 3)
 on conflict (tracking_code) do nothing;
+
+-- ============ CUSTOMER + DRIVER APP ============
+-- profiles: one row per Supabase Auth user (phone links bookings)
+create table if not exists public.profiles (
+  id uuid primary key,
+  full_name text not null default '',
+  phone text not null default '',
+  created_at timestamptz not null default now()
+);
+
+-- link quote requests to logged-in customers (nullable: guests still work)
+alter table public.quote_requests add column if not exists user_id uuid;
+
+-- loads board for the driver app
+create table if not exists public.loads (
+  id uuid primary key default gen_random_uuid(),
+  origin text not null,
+  destination text not null,
+  goods text not null default 'General goods',
+  weight_kg numeric not null default 1000,
+  fare int not null default 0,
+  status text not null default 'open',
+  driver_phone text not null default '',
+  pod_path text not null default '',
+  created_at timestamptz not null default now()
+);
+
+create index if not exists idx_loads_status on public.loads (status, created_at desc);
+
+alter table public.profiles enable row level security;
+alter table public.loads enable row level security;
+
+-- Drivers can SEE open loads (board); everything else via service-role APIs
+drop policy if exists "public can view open loads" on public.loads;
+create policy "public can view open loads"
+  on public.loads for select to anon using (status = 'open');
+
+-- profiles + quote user_id: service-role only (no anon policies = denied)

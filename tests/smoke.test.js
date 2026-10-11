@@ -162,6 +162,8 @@ describe("project structure", () => {
     const pages = [
       "/login",
       "/signup",
+      "/dashboard",
+      "/driver",
       "/drivers",
       "/services/packers-movers",
       "/services/packers-movers/book",
