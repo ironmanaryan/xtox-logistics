@@ -6,6 +6,7 @@ import { ArrowRight, CheckCircle2, IndianRupee } from "lucide-react";
 import { useAuthUserId } from "@/lib/use-auth-user";
 import { CROPS, GOVT_DOCS, DEST_COUNTRIES, inr } from "@/data/agri";
 import DocPicker, { type PickedDoc } from "@/components/DocPicker";
+import FormConsent from "@/components/FormConsent";
 
 export default function AgriForm({ mode }: { mode: "export" | "govt-docs" }) {
   const isExport = mode === "export";
@@ -269,6 +270,11 @@ export default function AgriForm({ mode }: { mode: "export" | "govt-docs" }) {
       {error && (
         <p className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{error}</p>
       )}
+      <FormConsent
+        id={idp("consent")}
+        className="mt-4"
+        note="I consent to being contacted about this request and to sharing only the documents required for it."
+      />
       <p className="mt-3 text-xs text-muted">Koi advance nahi. Pehli call bilkul free hai.</p>
     </form>
   );

@@ -81,6 +81,21 @@ describe("project structure", () => {
     }
   });
 
+  it("legal and company pages exist and are linked", () => {
+    for (const p of ["terms", "privacy", "refund-policy", "about"]) {
+      const f = path.join(appDir, p, "page.tsx");
+      assert.ok(fs.existsSync(f), `missing app/${p}/page.tsx`);
+    }
+    const footer = fs.readFileSync(path.join(ROOT, "components", "Footer.tsx"), "utf8");
+    assert.match(footer, /\/terms/, "footer must link Terms");
+    assert.match(footer, /\/privacy/, "footer must link Privacy");
+    assert.match(footer, /\/refund-policy/, "footer must link Refund policy");
+
+    const consent = fs.readFileSync(path.join(ROOT, "components", "FormConsent.tsx"), "utf8");
+    assert.match(consent, /\/terms/);
+    assert.match(consent, /\/privacy/);
+  });
+
   it("footer shows the real contact details", () => {
     const footer = fs.readFileSync(path.join(ROOT, "components", "Footer.tsx"), "utf8");
     assert.match(footer, /xtoxlogistics\.info@gmail\.com/);
@@ -165,6 +180,11 @@ describe("project structure", () => {
       "/dashboard",
       "/driver",
       "/drivers",
+      "/support",
+      "/about",
+      "/terms",
+      "/privacy",
+      "/refund-policy",
       "/services/packers-movers",
       "/services/packers-movers/book",
       "/services/packers-movers/estimate",

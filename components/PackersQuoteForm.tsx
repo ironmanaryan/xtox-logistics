@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { useAuthUserId } from "@/lib/use-auth-user";
+import FormConsent from "@/components/FormConsent";
 
 type HomeSize = "1BHK" | "2BHK" | "3BHK" | "Villa" | "Office";
 
@@ -21,6 +22,12 @@ function todayISO(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+/** Accepts common Indian formats: 9876543210, +91 98765 43210, 098765-43210. */
+function validIndianPhone(raw: string): boolean {
+  const digits = raw.replace(/\D/g, "").replace(/^(91|0)/, "");
+  return /^[6-9]\d{9}$/.test(digits);
+}
+
 export default function PackersQuoteForm() {
   const userId = useAuthUserId();
   const [name, setName] = useState("");
@@ -32,10 +39,16 @@ export default function PackersQuoteForm() {
   const [details, setDetails] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validIndianPhone(phone)) {
+      setPhoneError("Enter a valid 10-digit mobile number (e.g. 98765 43210).");
+      return;
+    }
+    setPhoneError(null);
     setLoading(true);
     setError(null);
     try {
@@ -125,7 +138,18 @@ export default function PackersQuoteForm() {
         </div>
         <div>
           <label htmlFor="pq-phone" className="label">Phone number</label>
-          <input id="pq-phone" required type="tel" pattern="[0-9+\-\s]{8,15}" className="input" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 98765 43210" />
+          <input
+            id="pq-phone"
+            required
+            type="tel"
+            inputMode="numeric"
+            className="input"
+            value={phone}
+            onChange={(e) => { setPhone(e.target.value); setPhoneError(null); }}
+            placeholder="+91 98765 43210"
+            autoComplete="tel"
+          />
+          {phoneError && <p className="mt-1 text-xs font-medium text-red-600">{phoneError}</p>}
         </div>
         <div>
           <label htmlFor="pq-pickup" className="label">Pickup location</label>
@@ -155,6 +179,11 @@ export default function PackersQuoteForm() {
           {error}
         </p>
       )}
+      <FormConsent
+        id="pq-consent"
+        className="mt-4"
+        note="I consent to a free survey call and service updates on call, SMS or WhatsApp."
+      />
       <p className="mt-3 text-xs text-muted">
         No spam, no OTP. Our team responds within 2 business hours.
       </p>

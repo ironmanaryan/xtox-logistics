@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { PartyPopper } from "lucide-react";
+import FormConsent from "@/components/FormConsent";
 
 const vehicleTypes = [
   "Tata Ace / Mini truck",
@@ -109,11 +110,11 @@ export default function DriverForm() {
         </div>
       </div>
 
-      <label className="mt-5 flex cursor-pointer items-start gap-3 text-sm text-muted">
-        <input required type="checkbox" className="mt-0.5 h-4 w-4 accent-[#111111]" />
-        I agree to document verification and consent to be contacted on
-        WhatsApp for load offers.
-      </label>
+      <FormConsent
+        id="d-consent"
+        className="mt-5"
+        note="I also agree to document verification and consent to being contacted on call, SMS or WhatsApp for load offers and payouts."
+      />
 
       <button type="submit" disabled={loading} className="btn-primary mt-6 w-full disabled:opacity-60">
         {loading ? "Submitting…" : "Submit & Start Earning →"}

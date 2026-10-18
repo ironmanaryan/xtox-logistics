@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Globe2, MapPin } from "lucide-react";
 import { useAuthUserId } from "@/lib/use-auth-user";
+import FormConsent from "@/components/FormConsent";
 
 type Scope = "international" | "domestic";
 
@@ -322,6 +323,11 @@ export default function EximForm({ mode }: { mode: "import" | "export" }) {
       {error && (
         <p className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{error}</p>
       )}
+      <FormConsent
+        id={`ex-consent-${mode}`}
+        className="mt-4"
+        note="I consent to being contacted about this shipment and to sharing only the documents required for it."
+      />
       <p className="mt-3 text-xs text-muted">HS classification + duty estimate included. Response within 2 business hours.</p>
     </form>
   );

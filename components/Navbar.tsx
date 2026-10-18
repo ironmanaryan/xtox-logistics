@@ -139,8 +139,8 @@ export default function Navbar() {
             </div>
           </div>
 
-          <Link href="/#services" className={linkCls("/#services")}>
-            Why XtoX
+          <Link href="/about" className={linkCls("/about")}>
+            Company
           </Link>
           <Link href="/#industries" className={linkCls("/#industries")}>
             Industries
@@ -208,6 +208,22 @@ export default function Navbar() {
             <Link href="/support" className="rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-neutral-50">
               Customer Support
             </Link>
+            <Link href="/about" className="rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-neutral-50">
+              Company
+            </Link>
+            <div className="my-2 h-px bg-line" />
+            <p className="eyebrow mb-1">Legal</p>
+            <div className="flex flex-wrap gap-2">
+              <Link href="/terms" className="chip hover:border-brand-black">
+                Terms &amp; Conditions
+              </Link>
+              <Link href="/privacy" className="chip hover:border-brand-black">
+                Privacy Policy
+              </Link>
+              <Link href="/refund-policy" className="chip hover:border-brand-black">
+                Refund &amp; Cancellation
+              </Link>
+            </div>
             <div className="mt-2 grid grid-cols-2 gap-2">
               <Link href="/login" className="btn-secondary !px-3">
                 <LogIn className="h-4 w-4" aria-hidden />

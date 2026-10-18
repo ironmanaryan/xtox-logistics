@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, IndianRupee } from "lucide-react";
 import { TRUCKS, GOODS_CATEGORIES } from "@/data/fleet";
 import DocPicker, { type PickedDoc } from "@/components/DocPicker";
+import FormConsent from "@/components/FormConsent";
 import { useAuthUserId } from "@/lib/use-auth-user";
 
 const LOADING_HELP = 800;
@@ -332,6 +333,11 @@ export default function SmeForm({ mode }: { mode: "on-demand" | "contract" }) {
       {error && (
         <p className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{error}</p>
       )}
+      <FormConsent
+        id={idp("consent")}
+        className="mt-4"
+        note="I consent to being contacted about this trip and to sharing only the documents required for it."
+      />
       <p className="mt-3 text-xs text-muted">Response within 2 business hours. Digital POD &amp; GST invoice on every trip.</p>
     </form>
   );

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Phone, Mail } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 import Logo from "./Logo";
 import { services } from "@/data/services";
 
@@ -30,17 +30,23 @@ const resources = [
   { href: "/resources/blog", label: "Blog" },
 ];
 
+const legal = [
+  { href: "/terms", label: "Terms & Conditions" },
+  { href: "/privacy", label: "Privacy Policy" },
+  { href: "/refund-policy", label: "Refund & Cancellation" },
+];
+
 export default function Footer() {
   return (
     <footer className="bg-brand-black text-white">
-      <div className="section-pad grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-5">
+      <div className="section-pad grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-6">
         <div className="lg:col-span-2">
           <Logo variant="full" className="h-16 w-auto" />
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/60">
             One logistics partner for businesses, families, SMEs and farmers —
             moving India&apos;s goods X to X, door to door.
           </p>
-          <div className="mt-5 flex flex-col gap-1.5 text-sm text-white/70">
+          <div className="mt-5 flex flex-col gap-2 text-sm text-white/70">
             <a href="tel:+917875488307" className="flex items-center gap-2 hover:text-brand-yellow">
               <Phone className="h-4 w-4 shrink-0" aria-hidden />
               +91 78754 88307
@@ -49,6 +55,13 @@ export default function Footer() {
               <Mail className="h-4 w-4 shrink-0" aria-hidden />
               xtoxlogistics.info@gmail.com
             </a>
+            <span className="flex items-start gap-2 text-white/60">
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+              <span>
+                Head Office: BMTC Complex, Outer Ring Road, Old Madiwala,
+                BTM Layout 2nd Stage, Bengaluru, Karnataka 560068
+              </span>
+            </span>
           </div>
           <div className="mt-5 flex items-center gap-3">
             <a
@@ -101,11 +114,25 @@ export default function Footer() {
         <div>
           <p className="text-sm font-bold uppercase tracking-wider text-white">Company</p>
           <ul className="mt-4 space-y-2.5 text-sm text-white/60">
+            <li><Link href="/about" className="hover:text-brand-yellow">About XtoX</Link></li>
             <li><Link href="/#services" className="hover:text-brand-yellow">Why XtoX</Link></li>
             <li><Link href="/#industries" className="hover:text-brand-yellow">Industries</Link></li>
             <li><Link href="/drivers" className="hover:text-brand-yellow">Driver Partners</Link></li>
             <li><Link href="/support" className="hover:text-brand-yellow">Customer Support</Link></li>
             <li><Link href="/#cta" className="hover:text-brand-yellow">Get a Quote</Link></li>
+          </ul>
+        </div>
+
+        <div>
+          <p className="text-sm font-bold uppercase tracking-wider text-white">Legal</p>
+          <ul className="mt-4 space-y-2.5 text-sm text-white/60">
+            {legal.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="transition-colors hover:text-brand-yellow">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
           </ul>
           <Link href="/#cta" className="btn-primary mt-5 !px-5 !py-2.5">
             Request a Quote
@@ -114,8 +141,15 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="section-pad flex flex-col items-center justify-between gap-2 py-5 text-xs text-white/50 sm:flex-row">
+        <div className="section-pad flex flex-col items-center justify-between gap-3 py-5 text-xs text-white/50 sm:flex-row">
           <p>© {new Date().getFullYear()} XtoX Logistics. All rights reserved.</p>
+          <nav aria-label="Legal" className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            {legal.map((l) => (
+              <Link key={l.href} href={l.href} className="transition-colors hover:text-brand-yellow">
+                {l.label}
+              </Link>
+            ))}
+          </nav>
           <p>Moving India&apos;s goods — X to X.</p>
         </div>
       </div>

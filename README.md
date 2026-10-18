@@ -39,10 +39,24 @@ public/               Logo files
 | Route | Purpose |
 |---|---|
 | `/` | Home + hero tracking tabs |
+| `/about` | Company overview, divisions, operating standards |
 | `/services/packers-movers` | Instant cost calculator |
 | `/services/import-export` | Customs clearance roadmap |
 | `/services/sme-transport` | On-demand vs scheduled fleet |
 | `/services/agri-export` | Cold-chain + APEDA benefits |
 | `/drivers` | Driver partner onboarding form |
+| `/support` | Support desks, contact details and head office |
+| `/terms` | Terms & Conditions |
+| `/privacy` | Privacy Policy |
+| `/refund-policy` | Refund & Cancellation Policy |
+
+## ⚖️ Legal & consent
+- Legal content lives in `data/legal.ts` (structured sections) and renders through
+  `components/LegalPage.tsx` — a shared shell with a sticky table of contents.
+- Terms, Privacy and Refund routes are `app/terms`, `app/privacy`, `app/refund-policy`.
+- Every enquiry/booking form includes a required agreement checkbox via
+  `components/FormConsent.tsx`, linking to the Terms and Privacy Policy.
+- Legal pages are linked from the site footer (Legal column + bottom bar), the
+  mobile menu, the sitemap and each legal page cross-links the other two.
 
 Logos (`logo-full.png`, `logo-mark.png`, `logo-icon.png`) are in `public/`.

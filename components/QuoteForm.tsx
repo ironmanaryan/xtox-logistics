@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, ShieldCheck } from "lucide-react";
 import { services } from "@/data/services";
 import { useAuthUserId } from "@/lib/use-auth-user";
+import FormConsent from "@/components/FormConsent";
 
 function validIndianPhone(raw: string): boolean {
   const digits = raw.replace(/\D/g, "").replace(/^(91|0)/, "");
@@ -177,8 +178,14 @@ export default function QuoteForm() {
           {error}
         </p>
       )}
-      <p className="mt-3 text-center text-xs text-muted">
-        No spam. Hum 2 business hours me call karenge.
+      <FormConsent
+        id="q-consent"
+        className="mt-4"
+        note="I consent to being contacted by call, SMS or WhatsApp about this request."
+      />
+      <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-xs text-muted">
+        <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand-black" aria-hidden />
+        No spam. Your details are used only for this quote.
       </p>
     </form>
   );

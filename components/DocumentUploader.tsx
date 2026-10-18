@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { CheckCircle2, FileText, Upload, X } from "lucide-react";
 import { MAX_BYTES, compressImage, fmtSize, isImageFile, isPdfFile } from "@/lib/compress-image";
 
@@ -33,6 +34,7 @@ export default function DocumentUploader() {
   const [docType, setDocType] = useState(DOC_TYPES[0]);
   const [files, setFiles] = useState<PickedFile[]>([]);
   const [busy, setBusy] = useState(false);
+  const [agree, setAgree] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState<string[] | null>(null);
 
@@ -88,6 +90,10 @@ export default function DocumentUploader() {
     }
     if (uploadable.length === 0) {
       setError("Please choose at least one valid document (PDF/JPG/PNG under 2 MB).");
+      return;
+    }
+    if (!agree) {
+      setError("Please confirm that you are authorised to share these documents and accept the Terms & Conditions.");
       return;
     }
     setBusy(true);
@@ -185,6 +191,27 @@ export default function DocumentUploader() {
           ))}
         </ul>
       )}
+
+      <label htmlFor="doc-agree" className="mt-4 flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-muted">
+        <input
+          id="doc-agree"
+          type="checkbox"
+          checked={agree}
+          onChange={(e) => { setAgree(e.target.checked); setError(null); }}
+          className="mt-0.5 h-4 w-4 shrink-0 accent-[#111111]"
+        />
+        <span>
+          I confirm I am authorised to share these documents, and I accept the{" "}
+          <Link href="/terms" className="font-semibold text-brand-black underline underline-offset-2">
+            Terms &amp; Conditions
+          </Link>{" "}
+          and{" "}
+          <Link href="/privacy" className="font-semibold text-brand-black underline underline-offset-2">
+            Privacy Policy
+          </Link>
+          . Documents are used only to process this shipment.
+        </span>
+      </label>
 
       <button type="button" onClick={onUpload} disabled={busy || uploadable.length === 0} className="btn-primary mt-5 w-full disabled:opacity-60">
         {busy ? "Uploading…" : `Upload ${uploadable.length} document${uploadable.length === 1 ? "" : "s"}`}

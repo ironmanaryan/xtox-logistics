@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import {
   ArrowLeft,
   ArrowRight,
@@ -64,6 +65,7 @@ export default function TruckBookingWidget() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [payMode, setPayMode] = useState<"online" | "cod">("online");
+  const [agree, setAgree] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [bookingId] = useState(makeBookingId);
 
@@ -99,6 +101,10 @@ export default function TruckBookingWidget() {
     }
     if (!validIndianPhone(phone)) {
       setError("Enter valid mobile number for driver OTP & tracking updates.");
+      return;
+    }
+    if (!agree) {
+      setError("Please accept the Terms & Conditions and Privacy Policy to confirm your booking.");
       return;
     }
     setError(null);
@@ -399,6 +405,27 @@ export default function TruckBookingWidget() {
               <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
               After booking, a driver is assigned, you verify pickup with an OTP, and track the truck live on GPS.
             </p>
+
+            <label htmlFor="tb-agree" className="mt-4 flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-muted">
+              <input
+                id="tb-agree"
+                type="checkbox"
+                checked={agree}
+                onChange={(e) => { setAgree(e.target.checked); setError(null); }}
+                className="mt-0.5 h-4 w-4 shrink-0 accent-[#111111]"
+              />
+              <span>
+                I accept the{" "}
+                <Link href="/terms" className="font-semibold text-brand-black underline underline-offset-2">
+                  Terms &amp; Conditions
+                </Link>{" "}
+                and{" "}
+                <Link href="/privacy" className="font-semibold text-brand-black underline underline-offset-2">
+                  Privacy Policy
+                </Link>
+                , and I am ready to pay the amount shown above.
+              </span>
+            </label>
 
             <div className="mt-5 flex gap-3">
               <button type="button" onClick={() => setStep(2)} className="btn-secondary flex-1">
