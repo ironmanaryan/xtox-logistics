@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
+import JsonLd from "@/components/JsonLd";
 import { ChevronDown } from "lucide-react";
 import { faqCategories as fallback } from "@/data/resources";
 import { getPublishedResources } from "@/lib/resources-db";
@@ -31,6 +32,20 @@ export default async function FaqPage() {
 
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: cats
+            .flatMap((cat) => cat.items)
+            .slice(0, 25)
+            .map((f) => ({
+              "@type": "Question",
+              name: f.q,
+              acceptedAnswer: { "@type": "Answer", text: f.a },
+            })),
+        }}
+      />
       <Navbar />
       <main>
         <PageHero

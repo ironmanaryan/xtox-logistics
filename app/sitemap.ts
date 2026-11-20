@@ -1,41 +1,63 @@
 import type { MetadataRoute } from "next";
-
-const BASE = "https://xtoxlogistics.vercel.app";
+import { SITE_URL } from "@/lib/site";
+import { corridors } from "@/data/cities";
+import { getAllPosts } from "@/lib/blog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
+  const page = (
+    path: string,
+    priority: number,
+    changeFrequency: "weekly" | "monthly" | "yearly"
+  ): MetadataRoute.Sitemap[number] => ({
+    url: `${SITE_URL}${path}`,
+    lastModified: now,
+    changeFrequency,
+    priority,
+  });
+
   const routes: MetadataRoute.Sitemap = [
-    { url: BASE, lastModified: now, changeFrequency: "weekly", priority: 1 },
-    { url: `${BASE}/services/packers-movers`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${BASE}/services/packers-movers/book`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/services/packers-movers/estimate`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/services/packers-movers/express`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/services/import-export`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${BASE}/services/import-export/import`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/services/import-export/export`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/services/import-export/documents`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/services/sme-transport`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${BASE}/services/sme-transport/on-demand`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/services/sme-transport/estimate`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/services/sme-transport/contract`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/services/agri-export`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${BASE}/services/agri-export/export-crop`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/services/agri-export/govt-docs`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/services/agri-export/mandi-price`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/drivers`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/support`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE}/resources/articles`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
-    { url: `${BASE}/resources/case-studies`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE}/resources/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${BASE}/resources/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
-    { url: `${BASE}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
-    { url: `${BASE}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
-    { url: `${BASE}/refund-policy`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
-    { url: `${BASE}/login`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${BASE}/signup`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${BASE}/dashboard`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
-    { url: `${BASE}/driver`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
+    page("", 1, "weekly"),
+    page("/services/packers-movers", 0.9, "monthly"),
+    page("/services/packers-movers/book", 0.8, "monthly"),
+    page("/services/packers-movers/estimate", 0.8, "monthly"),
+    page("/services/packers-movers/express", 0.8, "monthly"),
+    page("/packers-movers", 0.85, "monthly"),
+    page("/services/import-export", 0.9, "monthly"),
+    page("/services/import-export/import", 0.8, "monthly"),
+    page("/services/import-export/export", 0.8, "monthly"),
+    page("/services/import-export/documents", 0.8, "monthly"),
+    page("/services/sme-transport", 0.9, "monthly"),
+    page("/services/sme-transport/on-demand", 0.8, "monthly"),
+    page("/services/sme-transport/estimate", 0.8, "monthly"),
+    page("/services/sme-transport/contract", 0.8, "monthly"),
+    page("/services/agri-export", 0.9, "monthly"),
+    page("/services/agri-export/export-crop", 0.8, "monthly"),
+    page("/services/agri-export/govt-docs", 0.8, "monthly"),
+    page("/services/agri-export/mandi-price", 0.8, "monthly"),
+    page("/drivers", 0.8, "monthly"),
+    page("/support", 0.8, "monthly"),
+    page("/about", 0.7, "monthly"),
+    page("/blog", 0.75, "weekly"),
+    page("/resources/articles", 0.7, "weekly"),
+    page("/resources/case-studies", 0.7, "monthly"),
+    page("/resources/faq", 0.6, "monthly"),
+    page("/resources/blog", 0.7, "weekly"),
+    page("/terms", 0.4, "yearly"),
+    page("/privacy", 0.4, "yearly"),
+    page("/refund-policy", 0.4, "yearly"),
+    page("/login", 0.3, "yearly"),
+    page("/signup", 0.3, "yearly"),
+    page("/dashboard", 0.5, "weekly"),
+    page("/driver", 0.5, "weekly"),
+    ...corridors.map((c) => page(`/packers-movers/${c.slug}`, 0.65, "monthly")),
+    ...getAllPosts().map((p) => ({
+      url: `${SITE_URL}/blog/${p.slug}`,
+      lastModified: p.date ? new Date(p.date) : now,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
   ];
+
   return routes;
 }

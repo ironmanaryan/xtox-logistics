@@ -73,6 +73,39 @@ body {
     content: "";
     @apply inline-block h-2 w-2 rounded-full bg-brand-yellow;
   }
+
+  /* Long-form article typography (blog posts) */
+  .prose-xtox {
+    @apply text-base leading-relaxed text-brand-black;
+  }
+
+  .prose-xtox h2 {
+    @apply mt-8 mb-3 text-xl font-extrabold tracking-tight sm:text-2xl;
+  }
+
+  .prose-xtox h3 {
+    @apply mt-6 mb-2 text-lg font-bold tracking-tight;
+  }
+
+  .prose-xtox p {
+    @apply my-4 text-muted;
+  }
+
+  .prose-xtox ul {
+    @apply my-4 list-disc space-y-2 pl-5 text-muted;
+  }
+
+  .prose-xtox ol {
+    @apply my-4 list-decimal space-y-2 pl-5 text-muted;
+  }
+
+  .prose-xtox strong {
+    @apply font-bold text-brand-black;
+  }
+
+  .prose-xtox a {
+    @apply font-semibold underline underline-offset-2;
+  }
 }
 
 /* Subtle dotted grid backdrop for hero */
