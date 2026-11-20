@@ -1,50 +1,52 @@
 /**
- * Curated Unsplash photography used across the site.
- * All URLs verified live (HTTP 200) at build-authoring time.
+ * Local, optimised photography (served through next/image).
+ * Files live in /public/images. Replace with your own shoot when available.
+ *
+ * Source: Unsplash License (free for commercial use, no attribution required).
  */
 export const images = {
   truckHighway: {
-    src: "https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=1600&auto=format&fit=crop",
-    alt: "XtoX truck on the highway at dusk",
+    src: "/images/truck-highway.jpg",
+    alt: "Long-haul truck driving on an Indian highway at dusk",
   },
   loadingDock: {
-    src: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=1600&auto=format&fit=crop",
-    alt: "Cargo truck at a loading dock",
+    src: "/images/loading-dock.jpg",
+    alt: "Cargo truck backed into a loading dock",
   },
   containerCrane: {
-    src: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1600&auto=format&fit=crop",
-    alt: "Container crane operations at the port",
+    src: "/images/container-crane.jpg",
+    alt: "Container crane lifting freight at a port terminal",
   },
   warehouse: {
-    src: "https://images.unsplash.com/photo-1553413077-190dd305871c?q=80&w=1600&auto=format&fit=crop",
-    alt: "Warehouse aisles with racked pallets",
+    src: "/images/warehouse.jpg",
+    alt: "Warehouse aisles lined with racked pallets",
   },
   warehouseWorker: {
-    src: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=1600&auto=format&fit=crop",
-    alt: "Warehouse associate moving freight",
+    src: "/images/warehouse-worker.jpg",
+    alt: "Warehouse associate moving freight with a pallet truck",
   },
   movingBoxes: {
-    src: "https://images.unsplash.com/photo-1493946740644-2d8a1f1a6aff?q=80&w=1600&auto=format&fit=crop",
-    alt: "Packed moving boxes ready for relocation",
+    src: "/images/moving-boxes.jpg",
+    alt: "Packed and labelled moving boxes ready for relocation",
   },
   wheatField: {
-    src: "https://images.unsplash.com/photo-1501700493788-fa1a4fc9fe62?q=80&w=1600&auto=format&fit=crop",
-    alt: "Golden wheat field at harvest time",
+    src: "/images/wheat-field.jpg",
+    alt: "Golden wheat field ready for harvest",
   },
   containersAerial: {
-    src: "https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?q=80&w=1600&auto=format&fit=crop",
-    alt: "Shipping containers arranged at a terminal",
+    src: "/images/containers-aerial.jpg",
+    alt: "Shipping containers stacked at an export terminal",
   },
   truckSunset: {
-    src: "https://images.unsplash.com/photo-1565104781149-275a5392dabc?q=80&w=1600&auto=format&fit=crop",
-    alt: "Truck driving into the sunset",
+    src: "/images/truck-sunset.jpg",
+    alt: "Freight truck on an open road at sunset",
   },
   fleetYard: {
-    src: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?q=80&w=1600&auto=format&fit=crop",
-    alt: "Fleet of trucks parked at the depot",
+    src: "/images/fleet-yard.jpg",
+    alt: "Fleet of trucks parked at a logistics depot",
   },
   vanLoading: {
-    src: "https://images.unsplash.com/photo-1526394931762-90052e97b376?q=80&w=1600&auto=format&fit=crop",
+    src: "/images/van-loading.jpg",
     alt: "Worker loading parcels into a delivery van",
   },
 } as const;

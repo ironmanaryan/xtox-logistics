@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { heroMetrics } from "@/data/metrics";
+import { metrics } from "@/data/proof";
 
 function useCountUp(target: string, active: boolean) {
   const [display, setDisplay] = useState(target);
@@ -30,7 +30,15 @@ function useCountUp(target: string, active: boolean) {
   return display;
 }
 
-function Metric({ value, label, active }: { value: string; label: string; active: boolean }) {
+function Metric({
+  value,
+  label,
+  active,
+}: {
+  value: string;
+  label: string;
+  active: boolean;
+}) {
   const shown = useCountUp(value, active);
   const match = shown.match(/^([\d.]+)(.*)$/);
   return (
@@ -39,11 +47,18 @@ function Metric({ value, label, active }: { value: string; label: string; active
         {match ? match[1] : shown}
         {match && match[2] ? <span className="text-brand-yellow">{match[2]}</span> : null}
       </p>
-      <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-white/60">{label}</p>
+      <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-white/60">
+        {label}
+      </p>
     </div>
   );
 }
 
+/**
+ * Renders only when real, verifiable metrics exist in data/proof.ts.
+ * This intentionally hides the whole band rather than showing placeholder
+ * numbers on the live site.
+ */
 export default function MetricsBand() {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
@@ -64,10 +79,15 @@ export default function MetricsBand() {
     return () => io.disconnect();
   }, []);
 
+  if (metrics.length === 0) return null;
+
   return (
-    <section className="bg-brand-black">
-      <div ref={ref} className="section-pad grid grid-cols-2 gap-8 py-12 lg:grid-cols-4">
-        {heroMetrics.map((m) => (
+    <section className="bg-brand-black" aria-label="Company statistics">
+      <div
+        ref={ref}
+        className="section-pad grid grid-cols-2 gap-8 py-12 lg:grid-cols-4"
+      >
+        {metrics.map((m) => (
           <Metric key={m.label} value={m.value} label={m.label} active={active} />
         ))}
       </div>

@@ -4,6 +4,8 @@
  * Privacy and Refund policies with a consistent table of contents.
  */
 
+import { company } from "./company";
+
 export interface LegalSection {
   id: string;
   heading: string;
@@ -111,7 +113,7 @@ export const terms: LegalDoc = {
         "Transit insurance is optional and available on most services. Where you opt for it, goods are covered up to the declared value on the insurer's policy terms, subject to the deductible and exclusions in that policy.",
         "Where insurance is not purchased, our liability for loss or damage is limited to the amount stated in the applicable quotation or invoice and, in any case, to the extent permitted by the Carriage by Road Act, 2007 and other applicable law.",
         "We are not liable for loss or damage arising from inherent vice, ordinary wear, inadequate customer packing, electrical or mechanical derangement, leakage, or delays caused by events beyond our reasonable control.",
-        "Claims must be reported in writing within 7 days of delivery, with the delivery receipt, photographs and a description of the loss or damage.",
+        `Claims must be reported in writing within ${company.legal.claimWindowDays} days of delivery, with the delivery receipt, photographs and a description of the loss or damage.`,
       ],
     },
     {
@@ -216,7 +218,7 @@ export const terms: LegalDoc = {
       id: "law",
       heading: "21. Governing law and jurisdiction",
       paragraphs: [
-        "These Terms are governed by the laws of India. Subject to applicable consumer protections, the courts at Bengaluru, Karnataka have exclusive jurisdiction over any dispute.",
+        `These Terms are governed by ${company.legal.governingLaw}. Subject to applicable consumer protections, the courts at ${company.legal.jurisdiction} have exclusive jurisdiction over any dispute.`,
       ],
     },
     {

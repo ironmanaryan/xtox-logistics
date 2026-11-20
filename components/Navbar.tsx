@@ -3,13 +3,25 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, LogIn, UserPlus, Newspaper, BookOpen, HelpCircle, PenLine, ArrowRight } from "lucide-react";
+import {
+  ChevronDown,
+  LogIn,
+  UserPlus,
+  Newspaper,
+  BookOpen,
+  HelpCircle,
+  PenLine,
+  ArrowRight,
+} from "lucide-react";
 import Logo from "./Logo";
+import LanguageToggle from "./LanguageToggle";
+import { useI18n } from "./LanguageProvider";
 import { services } from "@/data/services";
+import { features } from "@/data/company";
 
 const resources = [
   { slug: "/resources/articles", label: "Articles", desc: "Guides on logistics & shipping", icon: Newspaper },
-  { slug: "/resources/case-studies", label: "Case Studies", desc: "Real results from real clients", icon: BookOpen },
+  { slug: "/resources/case-studies", label: "Case Studies", desc: "How engagements are handled", icon: BookOpen },
   { slug: "/resources/faq", label: "FAQ", desc: "Answers to common questions", icon: HelpCircle },
   { slug: "/resources/blog", label: "Blog", desc: "News & industry updates", icon: PenLine },
 ];
@@ -21,6 +33,7 @@ export default function Navbar() {
   const [resOpen, setResOpen] = useState(false);
   const pathname = usePathname();
   const resTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { t } = useI18n();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -58,7 +71,6 @@ export default function Navbar() {
         <Logo variant="full" className="h-14 w-auto" />
 
         <div className="hidden items-center gap-7 lg:flex">
-          {/* Services dropdown */}
           <div
             className="relative"
             onMouseEnter={() => setDropOpen(true)}
@@ -71,7 +83,7 @@ export default function Navbar() {
               aria-haspopup="true"
               onClick={() => setDropOpen((v) => !v)}
             >
-              Services
+              {t("nav.services")}
               <ChevronDown
                 className={`h-3.5 w-3.5 transition-transform duration-200 ${dropOpen ? "rotate-180" : ""}`}
                 aria-hidden
@@ -98,7 +110,6 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Resources dropdown */}
           <div className="relative" onMouseEnter={openRes} onMouseLeave={closeRes}>
             <button
               type="button"
@@ -107,7 +118,7 @@ export default function Navbar() {
               aria-haspopup="true"
               onClick={() => setResOpen((v) => !v)}
             >
-              Resources
+              {t("nav.resources")}
               <ChevronDown
                 className={`h-3.5 w-3.5 transition-transform duration-200 ${resOpen ? "rotate-180" : ""}`}
                 aria-hidden
@@ -140,28 +151,31 @@ export default function Navbar() {
           </div>
 
           <Link href="/about" className={linkCls("/about")}>
-            Company
+            {t("nav.company")}
           </Link>
           <Link href="/#industries" className={linkCls("/#industries")}>
-            Industries
+            {t("nav.industries")}
           </Link>
           <Link href="/support" className={linkCls("/support")}>
-            Support
+            {t("nav.support")}
           </Link>
           <Link href="/#cta" className={linkCls("/#cta")}>
-            Get a Quote
+            {t("nav.quote")}
           </Link>
         </div>
 
-        <div className="hidden items-center gap-5 lg:flex">
-          <Link
-            href="/login"
-            className="text-sm font-semibold text-muted transition-colors hover:text-brand-black"
-          >
-            Login
-          </Link>
+        <div className="hidden items-center gap-4 lg:flex">
+          <LanguageToggle />
+          {features.customerLogin && (
+            <Link
+              href="/login"
+              className="text-sm font-semibold text-muted transition-colors hover:text-brand-black"
+            >
+              {t("nav.login")}
+            </Link>
+          )}
           <Link href="/#cta" className="btn-primary !px-6 !py-2.5">
-            Get Quote
+            {t("nav.quote")}
             <ArrowRight className="h-4 w-4" aria-hidden />
           </Link>
         </div>
@@ -188,14 +202,18 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="max-h-[80vh] overflow-y-auto border-t border-line bg-white lg:hidden">
           <div className="section-pad flex flex-col gap-1 py-4">
-            <p className="eyebrow mb-1">Services</p>
+            <div className="mb-2 flex items-center justify-between">
+              <span className="eyebrow">Language</span>
+              <LanguageToggle />
+            </div>
+            <p className="eyebrow mb-1">{t("nav.services")}</p>
             {services.map((s) => (
               <Link key={s.key} href={s.slug} className="rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-neutral-50">
                 {s.name}
               </Link>
             ))}
             <div className="my-2 h-px bg-line" />
-            <p className="eyebrow mb-1">Resources</p>
+            <p className="eyebrow mb-1">{t("nav.resources")}</p>
             {resources.map((r) => (
               <Link key={r.slug} href={r.slug} className="rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-neutral-50">
                 {r.label}
@@ -206,10 +224,10 @@ export default function Navbar() {
               Driver Partners
             </Link>
             <Link href="/support" className="rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-neutral-50">
-              Customer Support
+              {t("nav.support")}
             </Link>
             <Link href="/about" className="rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-neutral-50">
-              Company
+              {t("nav.company")}
             </Link>
             <div className="my-2 h-px bg-line" />
             <p className="eyebrow mb-1">Legal</p>
@@ -224,16 +242,18 @@ export default function Navbar() {
                 Refund &amp; Cancellation
               </Link>
             </div>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              <Link href="/login" className="btn-secondary !px-3">
-                <LogIn className="h-4 w-4" aria-hidden />
-                Login
-              </Link>
-              <Link href="/signup" className="btn-primary !px-3">
-                <UserPlus className="h-4 w-4" aria-hidden />
-                Sign Up
-              </Link>
-            </div>
+            {features.customerLogin && (
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                <Link href="/login" className="btn-secondary !px-3">
+                  <LogIn className="h-4 w-4" aria-hidden />
+                  {t("nav.login")}
+                </Link>
+                <Link href="/signup" className="btn-primary !px-3">
+                  <UserPlus className="h-4 w-4" aria-hidden />
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}

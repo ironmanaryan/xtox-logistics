@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import Logo from "./Logo";
 import { services } from "@/data/services";
+import { company, registeredAddress } from "@/data/company";
 
 function InstagramIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
@@ -47,25 +48,35 @@ export default function Footer() {
             moving India&apos;s goods X to X, door to door.
           </p>
           <div className="mt-5 flex flex-col gap-2 text-sm text-white/70">
-            <a href="tel:+917875488307" className="flex items-center gap-2 hover:text-brand-yellow">
+            <a href={`tel:${company.phoneE164}`} className="flex items-center gap-2 hover:text-brand-yellow">
               <Phone className="h-4 w-4 shrink-0" aria-hidden />
-              +91 78754 88307
+              {company.phone}
             </a>
-            <a href="mailto:xtoxlogistics.info@gmail.com" className="flex items-center gap-2 hover:text-brand-yellow">
+            <a href={`mailto:${company.email}`} className="flex items-center gap-2 hover:text-brand-yellow">
               <Mail className="h-4 w-4 shrink-0" aria-hidden />
-              xtoxlogistics.info@gmail.com
+              {company.email}
             </a>
             <span className="flex items-start gap-2 text-white/60">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
               <span>
-                Head Office: BMTC Complex, Outer Ring Road, Old Madiwala,
-                BTM Layout 2nd Stage, Bengaluru, Karnataka 560068
+                <span className="font-semibold text-white/80">Registered office:</span>{" "}
+                {registeredAddress}
               </span>
             </span>
           </div>
+
+          <div className="mt-4 space-y-1 text-xs text-white/45">
+            <p>
+              {company.legalName}
+              {company.cin ? ` · CIN ${company.cin}` : ""}
+            </p>
+            {company.gstin ? <p>GSTIN: {company.gstin}</p> : null}
+            <p>Jurisdiction: {company.legal.jurisdiction}</p>
+          </div>
+
           <div className="mt-5 flex items-center gap-3">
             <a
-              href="https://instagram.com/xtoxlogisticsindia"
+              href={company.social.instagram}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="XtoX Logistics on Instagram"
@@ -74,7 +85,7 @@ export default function Footer() {
               <InstagramIcon className="h-4 w-4" />
             </a>
             <a
-              href="https://www.linkedin.com/company/xtox-logistics"
+              href={company.social.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="XtoX Logistics on LinkedIn"
@@ -115,10 +126,10 @@ export default function Footer() {
           <p className="text-sm font-bold uppercase tracking-wider text-white">Company</p>
           <ul className="mt-4 space-y-2.5 text-sm text-white/60">
             <li><Link href="/about" className="hover:text-brand-yellow">About XtoX</Link></li>
-            <li><Link href="/#services" className="hover:text-brand-yellow">Why XtoX</Link></li>
-            <li><Link href="/#industries" className="hover:text-brand-yellow">Industries</Link></li>
+            <li><Link href="/packers-movers/bengaluru-to-hyderabad" className="hover:text-brand-yellow">Bengaluru → Hyderabad</Link></li>
             <li><Link href="/drivers" className="hover:text-brand-yellow">Driver Partners</Link></li>
             <li><Link href="/support" className="hover:text-brand-yellow">Customer Support</Link></li>
+            <li><Link href="/resources/faq" className="hover:text-brand-yellow">FAQs</Link></li>
             <li><Link href="/#cta" className="hover:text-brand-yellow">Get a Quote</Link></li>
           </ul>
         </div>
@@ -142,7 +153,7 @@ export default function Footer() {
 
       <div className="border-t border-white/10">
         <div className="section-pad flex flex-col items-center justify-between gap-3 py-5 text-xs text-white/50 sm:flex-row">
-          <p>© {new Date().getFullYear()} XtoX Logistics. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {company.legalName}. All rights reserved.</p>
           <nav aria-label="Legal" className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
             {legal.map((l) => (
               <Link key={l.href} href={l.href} className="transition-colors hover:text-brand-yellow">
@@ -150,7 +161,7 @@ export default function Footer() {
               </Link>
             ))}
           </nav>
-          <p>Moving India&apos;s goods — X to X.</p>
+          <p>{company.tagline}</p>
         </div>
       </div>
     </footer>
