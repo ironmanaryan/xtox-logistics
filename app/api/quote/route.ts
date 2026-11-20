@@ -1,56 +1,31 @@
 import { NextResponse } from "next/server";
-import { getSupabase } from "@/lib/supabase";
+import { POST as createLead } from "../lead/route";
+
+/**
+ * Legacy endpoint kept for backwards compatibility.
+ *
+ * Older service forms (packers, SME, EXIM, agri) still post here. Everything is
+ * forwarded to /api/lead so there is exactly one validation + storage +
+ * notification path.
+ */
+export const runtime = "nodejs";
 
 export async function POST(req: Request) {
+  let body: Record<string, unknown>;
   try {
-    const body = await req.json();
-    const { name, company, service, phone, from, to, details, userId } = body ?? {};
-
-    if (!name || !service || !phone || !from || !to) {
-      return NextResponse.json(
-        { ok: false, error: "Missing required fields" },
-        { status: 400 }
-      );
-    }
-
-    const supabase = getSupabase();
-    if (!supabase) {
-      return NextResponse.json(
-        { ok: false, error: "Database not configured. Set Supabase env vars." },
-        { status: 503 }
-      );
-    }
-
-    const cleanUserId =
-      typeof userId === "string" && /^[0-9a-f-]{36}$/i.test(userId) ? userId : null;
-
-    const { error } = await supabase.from("quote_requests").insert({
-      name,
-      company: company || null,
-      service,
-      phone,
-      from_city: from,
-      to_city: to,
-      cargo_details: details || null,
-      user_id: cleanUserId,
-    });
-
-    if (error) {
-      console.error("quote insert error:", error.message);
-      const setupMissing = error.code === "PGRST205" || /schema cache/i.test(error.message ?? "");
-      return NextResponse.json(
-        {
-          ok: false,
-          error: setupMissing
-            ? "Booking system is being set up right now. Please try again in a while or reach us on WhatsApp — we will take your booking there."
-            : "Failed to save request",
-        },
-        { status: setupMissing ? 503 : 500 }
-      );
-    }
-
-    return NextResponse.json({ ok: true });
+    body = (await req.json()) as Record<string, unknown>;
   } catch {
     return NextResponse.json({ ok: false, error: "Bad request" }, { status: 400 });
   }
+
+  const forwarded = new Request(req.url, {
+    method: "POST",
+    headers: req.headers,
+    body: JSON.stringify({
+      ...body,
+      page: typeof body.page === "string" ? body.page : "/services",
+    }),
+  });
+
+  return createLead(forwarded);
 }
