@@ -43,8 +43,9 @@ export default function HomePage() {
                 We&apos;ll move it <span className="bg-brand-yellow px-2">X to X.</span>
               </h2>
               <p className="mt-4 max-w-md text-sm leading-relaxed text-muted sm:text-base">
-                Sirf naam, phone aur route batao — dedicated logistics manager
-                2 ghante me call karke best route, vehicle aur price dega.
+                Share your name, phone and route. A dedicated logistics manager
+                calls back within 2 business hours with the best route, vehicle
+                and a fixed price.
               </p>
               <ul className="mt-6 space-y-3 text-sm">
                 <li className="flex items-center gap-3">

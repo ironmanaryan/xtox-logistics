@@ -63,12 +63,12 @@ const benefits = [
 
 const faqs = [
   {
-    q: "Mere paas IEC/APEDA nahi hai. Kya export ho sakta hai?",
-    a: "Haan. Govt. documents page par jo chahiye tick karo — hum IEC aur APEDA RCMC banwane me poori madad karte hain, sirf sarkari fees aapki.",
+    q: "I don't have IEC or APEDA registration. Can I still export?",
+    a: "Yes. Tick what you need on the government documents page — we help you obtain IEC and APEDA RCMC registration end to end. You pay only the government fees.",
   },
   {
     q: "Chhota kisan hoon — 50 quintal se export possible hai?",
-    a: "Bilkul. Chhote lots ko LCL / mixed reefer containers me consolidate karte hain — poore container ka kharcha nahi, phir bhi export price.",
+    a: "Absolutely. Smaller lots are consolidated into LCL or mixed reefer containers, so you avoid paying for a full container while still getting export pricing.",
   },
   {
     q: "Kaunse documents upload karne honge?",
@@ -76,15 +76,15 @@ const faqs = [
   },
   {
     q: "Payment kaise milega? Dhokha to nahi hoga?",
-    a: "Structured milestones + escrow advisory — title transfer se pehle payment. Har step par hamara agri-expert aapke saath rehta hai.",
+    a: "Structured milestones with escrow advisory — payment is secured before title transfer. An agri specialist stays with you at every step.",
   },
   {
     q: "Cold-chain meri fasal ke liye zaroori hai?",
-    a: "Grapes, mango, banana, pomegranate jaise fresh produce ke liye haan — reefer farm gate se lagta hai. Grains aur spices ke liye dry container kaafi hai.",
+    a: "Yes, for fresh produce such as grapes, mango, banana and pomegranate — the reefer is positioned at the farm gate. Grains and spices travel fine in dry containers.",
   },
   {
     q: "Mandi se kitna zyada milega?",
-    a: "Crop par nirbhar — grapes me ~2x tak ka antar hota hai. Mandi-price page par apni fasal select karke live comparison dekho.",
+    a: "It depends on the crop — grapes can differ by up to about 2x. Select your crop on the mandi-price page for a live comparison.",
   },
 ];
 

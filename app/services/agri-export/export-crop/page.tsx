@@ -68,7 +68,7 @@ export default function AgriExportCropPage() {
             ))}
             <div className="rounded-2xl bg-brand-black p-6 text-white">
               <p className="font-extrabold text-brand-yellow">Papers pending?</p>
-              <p className="mt-1 text-sm text-white/80">IEC, APEDA, phytosanitary — hum banwa denge.</p>
+              <p className="mt-1 text-sm text-white/80">IEC, APEDA and phytosanitary paperwork — handled for you.</p>
               <Link href="/services/agri-export/govt-docs" className="btn-primary mt-4 w-full">
                 Govt. documents help
               </Link>

@@ -1,22 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { packersRates, estimateDisclaimer } from "@/data/rates";
 
-type MoveType = "1BHK" | "2BHK" | "3BHK" | "Villa" | "Office";
+type MoveType = keyof typeof packersRates.base;
 
-const MOVE_BASE: Record<MoveType, number> = {
-  "1BHK": 8000,
-  "2BHK": 14000,
-  "3BHK": 20000,
-  Villa: 32000,
-  Office: 26000,
-};
-
-const CITY_MULTIPLIER: Record<string, number> = {
-  metro: 1.15,
-  tier2: 1.0,
-  tier3: 0.9,
-};
+const MOVE_BASE = packersRates.base;
+const CITY_MULTIPLIER = packersRates.cityMultiplier;
 
 export default function PackersCalculator() {
   const [moveType, setMoveType] = useState<MoveType>("2BHK");
@@ -43,14 +33,20 @@ export default function PackersCalculator() {
   const estimate = useMemo(() => {
     const dist = Math.max(0, parseFloat(distance) || 0);
     const base = MOVE_BASE[moveType];
-    const transport = Math.round(dist * 22); // ₹22/km avg truck cost share
-    const packingCharge = packing ? Math.round(base * 0.18) : 0;
-    const insuranceCharge = insurance ? Math.round((base + transport) * 0.03) : 0;
+    const transport = Math.round(dist * packersRates.perKm);
+    const packingCharge = packing ? Math.round(base * packersRates.packingRate) : 0;
+    const insuranceCharge = insurance
+      ? Math.round((base + transport) * packersRates.insuranceRate)
+      : 0;
     const subtotal = Math.round(
-      (base * 0.55 + transport + packingCharge + insuranceCharge) *
+      (base * packersRates.baseShare + transport + packingCharge + insuranceCharge) *
         CITY_MULTIPLIER[cityTier]
     );
-    return { subtotal, gst: Math.round(subtotal * 0.18), total: Math.round(subtotal * 1.18) };
+    return {
+      subtotal,
+      gst: Math.round(subtotal * packersRates.gstRate),
+      total: Math.round(subtotal * (1 + packersRates.gstRate)),
+    };
   }, [moveType, cityTier, distance, packing, insurance]);
 
   return (
@@ -161,9 +157,7 @@ export default function PackersCalculator() {
             ₹{estimate.total.toLocaleString("en-IN")}
           </span>
         </div>
-        <p className="mt-2 text-xs text-muted">
-          Indicative only. Final price after free survey.
-        </p>
+        <p className="mt-2 text-xs text-muted">{estimateDisclaimer}</p>
       </div>
     </div>
   );

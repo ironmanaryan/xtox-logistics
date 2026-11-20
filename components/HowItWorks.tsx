@@ -7,7 +7,7 @@ const steps = [
   {
     icon: ClipboardList,
     title: "Quote maango",
-    text: "City, service aur phone batao — 2 ghante me fixed price callback.",
+    text: "Tell us the city, service and your phone number — fixed price callback within 2 business hours.",
   },
   {
     icon: Truck,

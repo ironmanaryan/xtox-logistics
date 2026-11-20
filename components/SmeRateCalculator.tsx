@@ -2,10 +2,11 @@
 
 import { useMemo, useState } from "react";
 import { TRUCKS } from "@/data/fleet";
+import { smeRates, estimateDisclaimer } from "@/data/rates";
 
-const LOADING = 800;
-const UNLOADING = 800;
-const INSURANCE_RATE = 0.02;
+const LOADING = smeRates.loading;
+const UNLOADING = smeRates.unloading;
+const INSURANCE_RATE = smeRates.insuranceRate;
 const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
 
 export default function SmeRateCalculator() {
@@ -20,12 +21,14 @@ export default function SmeRateCalculator() {
 
   const r = useMemo(() => {
     const km = Math.max(0, parseFloat(distance) || 0);
-    const freight = Math.round((truck.base + km * truck.perKm) * (loadType === "PTL" ? 0.6 : 1));
+    const freight = Math.round(
+      (truck.base + km * truck.perKm) * (loadType === "PTL" ? smeRates.ptlFactor : 1)
+    );
     const handling = (loading ? LOADING : 0) + (unloading ? UNLOADING : 0);
     const subtotal = freight + handling;
     const ins = insurance ? Math.round(subtotal * INSURANCE_RATE) : 0;
     const preGst = subtotal + ins;
-    const gst = Math.round(preGst * 0.18);
+    const gst = Math.round(preGst * smeRates.gstRate);
     return { km, freight, handling, ins, gst, total: preGst + gst, perKm: km > 0 ? Math.round((preGst + gst) / km) : 0 };
   }, [truck, distance, loadType, loading, unloading, insurance]);
 
@@ -103,7 +106,9 @@ export default function SmeRateCalculator() {
           <span className="text-sm font-bold uppercase tracking-wide">Total estimate</span>
           <span className="text-2xl font-extrabold">{inr(r.total)}</span>
         </div>
-        <p className="text-xs text-muted">≈ {inr(r.perKm)}/km all-in. Contract lanes get locked rates below this.</p>
+        <p className="text-xs text-muted">
+          ≈ {inr(r.perKm)}/km all-in. {estimateDisclaimer}
+        </p>
       </div>
     </div>
   );

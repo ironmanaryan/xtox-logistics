@@ -45,7 +45,7 @@ export default function AgriGovtDocsPage() {
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
               IEC se lekar phytosanitary tak — kaunsa document chahiye tick karo,
-              Aadhaar/PAN/7-12 upload karo. Filing hum karenge, sirf sarkari fees aapki.
+              Upload Aadhaar, PAN and 7/12. We handle the filing — you pay only government fees.
             </p>
           </div>
         </section>

@@ -275,7 +275,7 @@ export default function AgriForm({ mode }: { mode: "export" | "govt-docs" }) {
         className="mt-4"
         note="I consent to being contacted about this request and to sharing only the documents required for it."
       />
-      <p className="mt-3 text-xs text-muted">Koi advance nahi. Pehli call bilkul free hai.</p>
+      <p className="mt-3 text-xs text-muted">No advance payment. The first consultation call is free.</p>
     </form>
   );
 }

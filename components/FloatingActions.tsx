@@ -1,9 +1,13 @@
 "use client";
 
-import { Phone } from "lucide-react";
+import Link from "next/link";
+import { Phone, FileText } from "lucide-react";
+import { track } from "@/lib/analytics";
+import { company } from "@/data/company";
+import { useI18n } from "./LanguageProvider";
 
-const WA_NUMBER = "917875488307";
-const WA_TEXT = encodeURIComponent("Hi XtoX! Mujhe logistics quote chahiye.");
+const WA_NUMBER = company.whatsapp;
+const WA_TEXT = encodeURIComponent("Hi XtoX! I need a logistics quote.");
 
 function WhatsAppIcon({ className = "h-6 w-6" }: { className?: string }) {
   return (
@@ -13,7 +17,7 @@ function WhatsAppIcon({ className = "h-6 w-6" }: { className?: string }) {
   );
 }
 
-/** Floating WhatsApp chat button (bottom-left; chat widget lives bottom-right). */
+/** Floating WhatsApp button (desktop; the mobile bar covers phones). */
 export function WhatsAppFloat() {
   return (
     <a
@@ -21,30 +25,45 @@ export function WhatsAppFloat() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
-      className="fixed bottom-20 left-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-hero transition-all duration-300 hover:scale-105 sm:bottom-5 sm:left-5"
+      onClick={() => track("whatsapp_click", { location: "floating" })}
+      className="fixed bottom-20 left-4 z-50 hidden h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-hero transition-all duration-300 hover:scale-105 sm:bottom-5 sm:left-5 sm:flex"
     >
       <WhatsAppIcon />
     </a>
   );
 }
 
-/** Sticky call bar on mobile only. */
+/** Sticky mobile conversion bar: Call | WhatsApp | Get Quote. */
 export function MobileCallBar() {
+  const { t } = useI18n();
+
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-px border-t border-line bg-white sm:hidden">
-      <a href="tel:+917875488307" className="flex min-h-[56px] items-center justify-center gap-2 bg-brand-black text-sm font-extrabold text-white">
+    <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 gap-px border-t border-line bg-white sm:hidden">
+      <a
+        href={`tel:${company.phoneE164}`}
+        onClick={() => track("call_click", { location: "mobile_bar" })}
+        className="flex min-h-[60px] items-center justify-center gap-2 bg-brand-black text-sm font-extrabold text-white"
+      >
         <Phone className="h-4 w-4 text-brand-yellow" aria-hidden />
-        Call Now
+        {t("common.call")}
       </a>
       <a
         href={`https://wa.me/${WA_NUMBER}?text=${WA_TEXT}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex min-h-[56px] items-center justify-center gap-2 bg-brand-yellow text-sm font-extrabold text-brand-black"
+        onClick={() => track("whatsapp_click", { location: "mobile_bar" })}
+        className="flex min-h-[60px] items-center justify-center gap-2 bg-[#25D366] text-sm font-extrabold text-white"
       >
         <WhatsAppIcon className="h-5 w-5" />
-        WhatsApp
+        {t("common.whatsapp")}
       </a>
+      <Link
+        href="/#cta"
+        className="flex min-h-[60px] items-center justify-center gap-2 bg-brand-yellow text-sm font-extrabold text-brand-black"
+      >
+        <FileText className="h-4 w-4" aria-hidden />
+        {t("common.quote")}
+      </Link>
     </div>
   );
 }
