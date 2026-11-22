@@ -8,7 +8,14 @@ const source = JSON.parse(fs.readFileSync("lib/i18n-source.json", "utf8"));
 const dir = "lib/i18n-translations";
 fs.mkdirSync(dir, { recursive: true });
 
-const files = fs.readdirSync(dir).filter((f) => f.endsWith(".json")).sort();
+// Machine-generated batch first, then hand-written overrides win.
+const files = fs
+  .readdirSync(dir)
+  .filter((f) => f.endsWith(".json"))
+  .sort((a, b) => {
+    const generated = (name) => (name.startsWith("9") ? 0 : 1);
+    return generated(a) - generated(b) || a.localeCompare(b);
+  });
 const merged = {};
 for (const file of files) {
   const part = JSON.parse(fs.readFileSync(path.join(dir, file), "utf8"));
