@@ -3,6 +3,7 @@ import { Inclusive_Sans } from "next/font/google";
 import ChatWidget from "@/components/ChatWidget";
 import { WhatsAppFloat, MobileCallBar } from "@/components/FloatingActions";
 import LanguageProvider from "@/components/LanguageProvider";
+import AutoTranslate from "@/components/AutoTranslate";
 import ConsentBanner from "@/components/ConsentBanner";
 import Analytics from "@/components/Analytics";
 import { SITE_URL, DEFAULT_OG_IMAGE, OG_IMAGE_SIZE } from "@/lib/site";
@@ -64,7 +65,7 @@ export default function RootLayout({
     <html lang="en" className={inclusiveSans.variable}>
       <body className="min-h-screen bg-white text-brand-black antialiased">
         <LanguageProvider>
-          {children}
+          <AutoTranslate>{children}</AutoTranslate>
           <ChatWidget />
           <WhatsAppFloat />
           <MobileCallBar />
