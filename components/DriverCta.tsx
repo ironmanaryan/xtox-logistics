@@ -1,9 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
 import { images } from "@/data/images";
+import { useI18n } from "./LanguageProvider";
 
 export default function DriverCta() {
+  const { t } = useI18n();
+
   return (
     <section id="driver-cta" className="section-pad py-16">
       <div className="relative overflow-hidden rounded-3xl bg-brand-black px-8 py-12 text-white sm:px-12 lg:px-16">
@@ -28,51 +33,42 @@ export default function DriverCta() {
         <div className="relative grid items-center gap-8 lg:grid-cols-[1.4fr_1fr]">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="chip-yellow">Drive with XtoX</span>
+              <span className="chip-yellow">{t("driver.badge")}</span>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-green-400 px-3 py-1 text-xs font-extrabold text-brand-black">
-                Zero commission on first 10 trips
+                {t("driver.offer")}
               </span>
             </div>
             <h2 className="mt-4 text-3xl font-extrabold leading-tight sm:text-4xl">
-              Own a truck? Turn it into a
-              <span className="text-brand-yellow"> money machine.</span>
+              {t("driver.title1")}
+              <span className="text-brand-yellow">{t("driver.title2")}</span>
             </h2>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base">
-              Join 850+ driver partners getting daily load offers, transparent
-              payments within 48 hours, and zero commission on first 10 trips.
+              {t("driver.body")}
             </p>
             <ul className="mt-5 grid max-w-lg gap-2 text-sm text-white/80 sm:grid-cols-2">
-              {["Daily load availability", "48-hr payment assurance", "Free digital LR tools", "Fuel & toll support desk"].map(
-                (item) => (
-                  <li key={item} className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-brand-yellow" aria-hidden />
-                    {item}
-                  </li>
-                )
-              )}
+              {[t("driver.p1"), t("driver.p2"), t("driver.p3"), t("driver.p4")].map((item) => (
+                <li key={item} className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 shrink-0 text-brand-yellow" aria-hidden />
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-            <p className="text-sm font-semibold text-white/90">
-              Onboard in 3 steps:
-            </p>
+            <p className="text-sm font-semibold text-white/90">{t("driver.steps")}</p>
             <ol className="mt-3 space-y-3 text-sm text-white/70">
-              <li className="flex gap-3">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-yellow text-xs font-extrabold text-brand-black">1</span>
-                Share licence & RC details
-              </li>
-              <li className="flex gap-3">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-yellow text-xs font-extrabold text-brand-black">2</span>
-                Verification within 24 hrs
-              </li>
-              <li className="flex gap-3">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-yellow text-xs font-extrabold text-brand-black">3</span>
-                Get first load offer
-              </li>
+              {[t("driver.s1"), t("driver.s2"), t("driver.s3")].map((step, i) => (
+                <li key={step} className="flex gap-3">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-yellow text-xs font-extrabold text-brand-black">
+                    {i + 1}
+                  </span>
+                  {step}
+                </li>
+              ))}
             </ol>
             <Link href="/drivers" className="btn-yellow-lg mt-6 w-full !px-8 !py-4 !text-lg">
-              Start Earning Today →
+              {t("driver.cta")} →
             </Link>
           </div>
         </div>

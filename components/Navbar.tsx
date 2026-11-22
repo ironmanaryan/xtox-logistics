@@ -16,15 +16,35 @@ import {
 import Logo from "./Logo";
 import LanguageToggle from "./LanguageToggle";
 import { useI18n } from "./LanguageProvider";
+import type { TKey } from "@/lib/i18n";
 import { services } from "@/data/services";
 import { features } from "@/data/company";
 
-const resources = [
-  { slug: "/resources/articles", label: "Articles", desc: "Guides on logistics & shipping", icon: Newspaper },
-  { slug: "/resources/case-studies", label: "Case Studies", desc: "How engagements are handled", icon: BookOpen },
-  { slug: "/resources/faq", label: "FAQ", desc: "Answers to common questions", icon: HelpCircle },
-  { slug: "/resources/blog", label: "Blog", desc: "News & industry updates", icon: PenLine },
+const resources: {
+  slug: string;
+  labelKey: TKey;
+  descKey: TKey;
+  icon: typeof Newspaper;
+}[] = [
+  { slug: "/resources/articles", labelKey: "nav.res.articles", descKey: "nav.res.articlesDesc", icon: Newspaper },
+  { slug: "/resources/case-studies", labelKey: "nav.res.caseStudies", descKey: "nav.res.caseStudiesDesc", icon: BookOpen },
+  { slug: "/resources/faq", labelKey: "nav.res.faq", descKey: "nav.res.faqDesc", icon: HelpCircle },
+  { slug: "/resources/blog", labelKey: "nav.res.blog", descKey: "nav.res.blogDesc", icon: PenLine },
 ];
+
+const SERVICE_NAME: Record<string, TKey> = {
+  "packers-movers": "svc.pm.name",
+  "import-export": "svc.ie.name",
+  "sme-transport": "svc.sme.name",
+  "agri-export": "svc.agri.name",
+};
+
+const SERVICE_TAGLINE: Record<string, TKey> = {
+  "packers-movers": "svc.pm.tagline",
+  "import-export": "svc.ie.tagline",
+  "sme-transport": "svc.sme.tagline",
+  "agri-export": "svc.agri.tagline",
+};
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -102,8 +122,12 @@ export default function Navbar() {
                     href={s.slug}
                     className="group rounded-xl p-3 transition-colors duration-200 hover:bg-neutral-50"
                   >
-                    <p className="text-sm font-bold text-brand-black">{s.name}</p>
-                    <p className="mt-0.5 text-xs text-muted">{s.tagline}</p>
+                    <p className="text-sm font-bold text-brand-black">
+                      {SERVICE_NAME[s.key] ? t(SERVICE_NAME[s.key]) : s.name}
+                    </p>
+                    <p className="mt-0.5 text-xs text-muted">
+                      {SERVICE_TAGLINE[s.key] ? t(SERVICE_TAGLINE[s.key]) : s.tagline}
+                    </p>
                   </Link>
                 ))}
               </div>
@@ -141,8 +165,8 @@ export default function Navbar() {
                       <r.icon className="h-4 w-4" aria-hidden />
                     </span>
                     <span>
-                      <span className="block text-sm font-bold text-brand-black">{r.label}</span>
-                      <span className="block text-xs text-muted">{r.desc}</span>
+                      <span className="block text-sm font-bold text-brand-black">{t(r.labelKey)}</span>
+                      <span className="block text-xs text-muted">{t(r.descKey)}</span>
                     </span>
                   </Link>
                 ))}
@@ -184,7 +208,7 @@ export default function Navbar() {
           type="button"
           className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-line lg:hidden"
           onClick={() => setMobileOpen((v) => !v)}
-          aria-label="Toggle menu"
+          aria-label={t("nav.menu")}
           aria-expanded={mobileOpen}
         >
           {mobileOpen ? (
@@ -203,25 +227,25 @@ export default function Navbar() {
         <div className="max-h-[80vh] overflow-y-auto border-t border-line bg-white lg:hidden">
           <div className="section-pad flex flex-col gap-1 py-4">
             <div className="mb-2 flex items-center justify-between">
-              <span className="eyebrow">Language</span>
+              <span className="eyebrow">{t("nav.language")}</span>
               <LanguageToggle />
             </div>
             <p className="eyebrow mb-1">{t("nav.services")}</p>
             {services.map((s) => (
               <Link key={s.key} href={s.slug} className="rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-neutral-50">
-                {s.name}
+                {SERVICE_NAME[s.key] ? t(SERVICE_NAME[s.key]) : s.name}
               </Link>
             ))}
             <div className="my-2 h-px bg-line" />
             <p className="eyebrow mb-1">{t("nav.resources")}</p>
             {resources.map((r) => (
               <Link key={r.slug} href={r.slug} className="rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-neutral-50">
-                {r.label}
+                {t(r.labelKey)}
               </Link>
             ))}
             <div className="my-2 h-px bg-line" />
             <Link href="/drivers" className="rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-neutral-50">
-              Driver Partners
+              {t("nav.drivers")}
             </Link>
             <Link href="/support" className="rounded-xl px-3 py-2.5 text-sm font-semibold hover:bg-neutral-50">
               {t("nav.support")}
@@ -230,16 +254,16 @@ export default function Navbar() {
               {t("nav.company")}
             </Link>
             <div className="my-2 h-px bg-line" />
-            <p className="eyebrow mb-1">Legal</p>
+            <p className="eyebrow mb-1">{t("nav.legal")}</p>
             <div className="flex flex-wrap gap-2">
               <Link href="/terms" className="chip hover:border-brand-black">
-                Terms &amp; Conditions
+                {t("nav.terms")}
               </Link>
               <Link href="/privacy" className="chip hover:border-brand-black">
-                Privacy Policy
+                {t("nav.privacy")}
               </Link>
               <Link href="/refund-policy" className="chip hover:border-brand-black">
-                Refund &amp; Cancellation
+                {t("nav.refund")}
               </Link>
             </div>
             {features.customerLogin && (
@@ -250,7 +274,7 @@ export default function Navbar() {
                 </Link>
                 <Link href="/signup" className="btn-primary !px-3">
                   <UserPlus className="h-4 w-4" aria-hidden />
-                  Sign Up
+                  {t("nav.signup")}
                 </Link>
               </div>
             )}

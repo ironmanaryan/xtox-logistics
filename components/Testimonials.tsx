@@ -5,8 +5,10 @@ import { ChevronLeft, ChevronRight, Star, BadgeCheck } from "lucide-react";
 import Reveal from "./Reveal";
 import { clients, rating, testimonials } from "@/data/proof";
 import { features, visibleComplianceBadges } from "@/data/company";
+import { useI18n } from "./LanguageProvider";
 
 export default function Testimonials() {
+  const { t: tr } = useI18n();
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const badges = visibleComplianceBadges();
@@ -31,9 +33,9 @@ export default function Testimonials() {
   return (
     <section className="section-pad py-16 lg:py-20" aria-label="Trust and social proof">
       <Reveal className="mx-auto max-w-2xl text-center">
-        <p className="eyebrow justify-center">Trust &amp; social proof</p>
+        <p className="eyebrow justify-center">{tr("trust.eyebrow")}</p>
         <h2 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
-          What customers say
+          {tr("trust.title")}
         </h2>
         {rating ? (
           <a
@@ -123,7 +125,7 @@ export default function Testimonials() {
       {clients.length > 0 && (
         <div className="mt-10">
           <p className="text-center text-xs font-bold uppercase tracking-[0.18em] text-muted">
-            Businesses we work with
+            {tr("trust.clients")}
           </p>
           <div className="mt-4 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
             {clients.map((c) => (

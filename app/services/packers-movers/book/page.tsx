@@ -44,7 +44,7 @@ export default function PackersBookPage() {
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
               Fill pickup &amp; drop, shifting date and home size — 60 seconds,
-              no OTP, no spam. Starting at <strong className="text-brand-black">₹7,499</strong>.
+              no OTP, no spam. Your fixed price is shared after the free survey.
             </p>
           </div>
         </section>

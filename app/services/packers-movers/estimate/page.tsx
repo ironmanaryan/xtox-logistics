@@ -27,7 +27,7 @@ export default function PackersEstimatePage() {
             </nav>
             <span className="chip-yellow mt-6">
               <Calculator className="h-3.5 w-3.5" aria-hidden />
-              Instant estimate
+              Guided estimate
             </span>
             <h1 className="mt-4 max-w-3xl text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl">
               Moving cost{" "}
@@ -37,8 +37,9 @@ export default function PackersEstimatePage() {
               </span>
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
-              Adjust home size, distance, packing and insurance to see your full
-              price with GST. Final locked price comes after your free survey.
+              Add your route, home size, shifting date and the extras you need.
+              We show a price only for your actual move — the fixed amount is
+              confirmed after your free survey.
             </p>
           </div>
         </section>
@@ -57,7 +58,7 @@ export default function PackersEstimatePage() {
           </div>
           <div className="mt-6 text-center">
             <Link href="/services/packers-movers/book" className="btn-primary">
-              Lock this price — get quote →
+              Get my fixed quote →
             </Link>
           </div>
         </div>

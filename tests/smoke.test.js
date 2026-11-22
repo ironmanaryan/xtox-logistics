@@ -97,11 +97,18 @@ describe("project structure", () => {
   });
 
   it("footer shows the real contact details", () => {
+    // Values live in data/company.ts; the footer must render them, not hardcode copies.
+    const company = fs.readFileSync(path.join(ROOT, "data", "company.ts"), "utf8");
+    assert.match(company, /xtoxlogistics\.info@gmail\.com/);
+    assert.match(company, /7875488307/);
+    assert.match(company, /xtoxlogisticsindia/);
+    assert.match(company, /linkedin\.com\/company\/xtox-logistics/);
+
     const footer = fs.readFileSync(path.join(ROOT, "components", "Footer.tsx"), "utf8");
-    assert.match(footer, /xtoxlogistics\.info@gmail\.com/);
-    assert.match(footer, /7875488307/);
-    assert.match(footer, /xtoxlogisticsindia/);
-    assert.match(footer, /linkedin\.com\/company\/xtox-logistics/);
+    assert.match(footer, /company\.email/);
+    assert.match(footer, /company\.phoneE164/);
+    assert.match(footer, /company\.social\.instagram/);
+    assert.match(footer, /company\.social\.linkedin/);
   });
 
   it("navbar links Login and Sign Up", () => {

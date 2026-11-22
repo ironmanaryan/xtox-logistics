@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import { cities, corridors, corridorDistance } from "@/data/cities";
-import { packersRates, estimateDisclaimer } from "@/data/rates";
 import { company } from "@/data/company";
 import { socialMetadata, absoluteUrl } from "@/lib/site";
 import { Check, MapPin, PhoneCall, Truck } from "lucide-react";
@@ -25,23 +24,18 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   if (!corridor) return {};
   const { from, to } = corridor;
   const title = `Packers and Movers ${from.name} to ${to.name}`;
-  const description = `House and office shifting from ${from.name} to ${to.name} — free survey, graded packing material, transit insurance and a tracked delivery. Get an indicative price and a callback within ${company.callbackPromise}.`;
+  const description = `House and office shifting from ${from.name} to ${to.name} — free survey, graded packing material, transit insurance and a tracked delivery. Get a callback within ${company.callbackPromise}.`;
   return { title, description, ...socialMetadata({ title, description, path: `/packers-movers/${corridor.slug}` }) };
 }
 
-const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
-
-function indicative(distanceKm: number, size: keyof typeof packersRates.base) {
-  const base = packersRates.base[size];
-  const transport = distanceKm * packersRates.perKm;
-  const pre =
-    base * packersRates.baseShare +
-    transport +
-    base * packersRates.packingRate +
-    (base + transport) * packersRates.insuranceRate;
-  const withGst = pre * (1 + packersRates.gstRate);
-  return Math.round(withGst / 500) * 500;
-}
+const QUOTE_FACTORS = [
+  "Home or office size and actual volume of goods",
+  "Floor and lift access at both addresses",
+  "Packing material needed for fragile items",
+  "Declared value for transit insurance",
+  "Shifting date and pickup flexibility",
+  "Tolls, permits and any storage in transit",
+];
 
 export default function CorridorPage({ params }: { params: { slug: string } }) {
   const corridor = findCorridor(params.slug);
@@ -49,10 +43,6 @@ export default function CorridorPage({ params }: { params: { slug: string } }) {
   const { from, to } = corridor;
   const km = corridorDistance(from, to);
   const days = Math.max(1, Math.round(km / 400));
-  const prices = (["1BHK", "2BHK", "3BHK"] as const).map((size) => ({
-    size,
-    price: indicative(km, size),
-  }));
 
   const url = absoluteUrl(`/packers-movers/${corridor.slug}`);
 
@@ -63,7 +53,7 @@ export default function CorridorPage({ params }: { params: { slug: string } }) {
     },
     {
       q: `What does a ${from.name} to ${to.name} move cost?`,
-      a: `Indicative all-inclusive ranges are shown on this page. The final quote is fixed after a free survey that counts actual volume, floor and lift access, packing material and insurance value.`,
+      a: `We share your price after a free survey that counts actual volume, floor and lift access, packing material and insurance value. Add your move details in the quote form and an executive confirms the fixed amount within ${company.callbackPromise}.`,
     },
     {
       q: `Is my goods protected during transit?`,
@@ -136,20 +126,32 @@ export default function CorridorPage({ params }: { params: { slug: string } }) {
         <section className="section-pad grid gap-8 pb-16 lg:grid-cols-[1.2fr_1fr]">
           <div>
             <h2 className="text-2xl font-extrabold tracking-tight">
-              Indicative {from.name} → {to.name} pricing
+              How your {from.name} → {to.name} quote is built
             </h2>
             <p className="mt-2 text-sm text-muted">
-              All-inclusive estimates including packing, transport, insurance and GST.
+              Every move is priced after we see the actual requirement — not from a printed
+              rate card.
             </p>
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              {prices.map((p) => (
-                <div key={p.size} className="card p-5">
-                  <p className="text-xs font-bold uppercase tracking-wide text-muted">{p.size}</p>
-                  <p className="mt-1 text-xl font-extrabold">from {inr(p.price)}</p>
-                </div>
+            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+              {QUOTE_FACTORS.map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-black" aria-hidden />
+                  {item}
+                </li>
               ))}
+            </ul>
+            <div className="mt-6 rounded-2xl bg-brand-yellow p-6">
+              <p className="text-lg font-extrabold text-brand-black">
+                Get your exact price for this lane.
+              </p>
+              <p className="mt-1 text-sm text-brand-black/70">
+                Add your home size, floors and shifting date — our move desk calls back within{" "}
+                {company.callbackPromise} with a fixed quote.
+              </p>
+              <Link href="/services/packers-movers/book" className="btn-secondary mt-4">
+                Start my quote
+              </Link>
             </div>
-            <p className="mt-3 text-xs text-muted">{estimateDisclaimer}</p>
 
             <h2 className="mt-10 text-2xl font-extrabold tracking-tight">What the move includes</h2>
             <ul className="mt-4 grid gap-3 sm:grid-cols-2">

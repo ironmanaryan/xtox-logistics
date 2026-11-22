@@ -78,11 +78,10 @@ export default function QuoteForm() {
 
   const validateStep1 = () => {
     const next: Record<string, string> = {};
-    if (form.name.trim().length < 2) next.name = "Please enter your name.";
-    if (!validIndianPhone(form.phone))
-      next.phone = "Enter a valid 10-digit Indian mobile number.";
-    if (!form.from.trim()) next.from = "Pickup city is required.";
-    if (!form.to.trim()) next.to = "Drop city is required.";
+    if (form.name.trim().length < 2) next.name = t("quote.errName");
+    if (!validIndianPhone(form.phone)) next.phone = t("quote.errPhone");
+    if (!form.from.trim()) next.from = t("quote.errFrom");
+    if (!form.to.trim()) next.to = t("quote.errTo");
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -293,7 +292,8 @@ export default function QuoteForm() {
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="q-company" className="label">
-                {t("quote.company")} <span className="font-normal text-muted">(optional)</span>
+                {t("quote.company")}{" "}
+                <span className="font-normal text-muted">({t("quote.optional")})</span>
               </label>
               <input
                 id="q-company"
@@ -306,7 +306,8 @@ export default function QuoteForm() {
             </div>
             <div>
               <label htmlFor="q-email" className="label">
-                Email <span className="font-normal text-muted">(optional)</span>
+                {t("quote.email")}{" "}
+                <span className="font-normal text-muted">({t("quote.optional")})</span>
               </label>
               <input
                 id="q-email"
@@ -320,7 +321,8 @@ export default function QuoteForm() {
             </div>
             <div className="sm:col-span-2">
               <label htmlFor="q-details" className="label">
-                {t("quote.details")} <span className="font-normal text-muted">(optional)</span>
+                {t("quote.details")}{" "}
+                <span className="font-normal text-muted">({t("quote.optional")})</span>
               </label>
               <textarea
                 id="q-details"
@@ -344,7 +346,7 @@ export default function QuoteForm() {
               <ArrowLeft className="h-4 w-4" aria-hidden /> {t("quote.back")}
             </button>
             <button type="submit" disabled={loading} className="btn-primary flex-1 !py-3.5 disabled:opacity-60">
-              {loading ? "Sending…" : t("quote.submit")}
+              {loading ? t("quote.sending") : t("quote.submit")}
             </button>
           </div>
         </>
@@ -353,11 +355,11 @@ export default function QuoteForm() {
       <FormConsent
         id="q-consent"
         className="mt-4"
-        note="I consent to being contacted by call, SMS or WhatsApp about this request."
+        note={t("quote.consent")}
       />
       <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-xs text-muted">
         <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand-black" aria-hidden />
-        No spam. Your details are used only for this quote.
+        {t("quote.noSpam")}
       </p>
     </form>
   );

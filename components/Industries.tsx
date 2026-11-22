@@ -1,3 +1,7 @@
+"use client";
+
+import { useI18n } from "./LanguageProvider";
+
 const industries = [
   "Manufacturing",
   "Retail & FMCG",
@@ -12,10 +16,11 @@ const industries = [
 ];
 
 export default function Industries() {
+  const { t } = useI18n();
   const row = [...industries, ...industries];
   return (
     <section id="industries" className="overflow-hidden border-y border-line py-10">
-      <p className="eyebrow section-pad mb-6">Industries we serve</p>
+      <p className="eyebrow section-pad mb-6">{t("industries.eyebrow")}</p>
       <div className="relative">
         <div className="flex w-max animate-marquee gap-4">
           {row.map((name, i) => (

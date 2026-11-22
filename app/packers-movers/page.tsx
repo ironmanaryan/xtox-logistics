@@ -9,7 +9,7 @@ import { ArrowRight, PhoneCall } from "lucide-react";
 
 const title = "Packers & Movers City Routes";
 const description =
-  "Intercity household and office moving across Bengaluru, Hyderabad, Chennai, Mumbai, Pune, Delhi NCR, Kochi and Coimbatore — indicative prices and free surveys on every lane.";
+  "Intercity household and office moving across Bengaluru, Hyderabad, Chennai, Mumbai, Pune, Delhi NCR, Kochi and Coimbatore — transit times and free surveys on every lane.";
 
 export const metadata: Metadata = {
   title,
@@ -28,8 +28,8 @@ export default function CorridorIndexPage() {
             Moving between India&apos;s working cities.
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">
-            Pick your lane for an indicative price, transit estimate and the areas we cover on
-            both ends. Every route gets a free survey before the quote is fixed.
+            Pick your lane for the transit time and the areas we cover on both ends.
+            Every route gets a free survey before the quote is fixed.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/services/packers-movers/book" className="btn-primary">

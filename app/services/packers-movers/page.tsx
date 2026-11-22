@@ -29,14 +29,14 @@ const bookingCards = [
     icon: ClipboardList,
     title: "Full Home Shifting",
     desc: "Pickup, drop, date & home size — get a fixed quote with free video survey.",
-    meta: "Starting at ₹7,499",
+    meta: "Fixed quote after survey",
   },
   {
     href: "/services/packers-movers/estimate",
     icon: Calculator,
     title: "Cost Calculator",
     desc: "Play with home size, distance, packing & insurance. Full GST breakup.",
-    meta: "Free • 30 seconds",
+    meta: "After your move details",
   },
   {
     href: "/services/packers-movers/express",
@@ -75,8 +75,8 @@ const steps = [
   {
     n: "02",
     icon: PhoneCall,
-    title: "Instant Quote & Survey Call",
-    text: "Get a rough estimate instantly. Our executive then calls you for a quick video or in-person survey to discuss exact requirements.",
+    title: "Requirement & Survey Call",
+    text: "Our executive calls you for a quick video or in-person survey and records your exact requirement — rooms, floor access, packing and insurance.",
   },
   {
     n: "03",
@@ -101,7 +101,7 @@ const steps = [
 const faqs = [
   {
     q: "How is the cost calculated?",
-    a: "Move size, distance, packing material and insurance. Open the cost calculator for an instant detailed range — final price is locked after the free survey.",
+    a: "Move size, distance, packing material and insurance. The calculator asks for your route, home size and date first, then shows an indicative range — the fixed price is confirmed after the free survey.",
   },
   {
     q: "How much advance do I need to pay?",
@@ -159,8 +159,8 @@ export default function PackersMoversPage() {
               <span className="bg-brand-yellow px-2 text-brand-black">in India</span>
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-center text-sm leading-relaxed text-white/80 sm:text-base">
-              Stress-free house shifting with XtoX Packers and Movers.
-              Starting at <strong className="text-brand-yellow">₹7,499</strong>.
+              Stress-free house shifting with XtoX Packers and Movers — free survey
+              first, fixed price after.
             </p>
             <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
               <Link href="/services/packers-movers/book" className="btn-primary !px-8 !py-4">
