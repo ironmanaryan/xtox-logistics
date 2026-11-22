@@ -5,6 +5,10 @@
  * Source: Unsplash License (free for commercial use, no attribution required).
  */
 export const images = {
+  heroFleet: {
+    src: "/images/hero-fleet.jpg",
+    alt: "Container trucks leaving a port terminal at sunrise",
+  },
   truckHighway: {
     src: "/images/truck-highway.jpg",
     alt: "Long-haul truck driving on an Indian highway at dusk",

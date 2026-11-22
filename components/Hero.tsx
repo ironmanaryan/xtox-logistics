@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { ArrowRight, MapPin, Package } from "lucide-react";
+import { ArrowRight, MapPin, Package, ScrollText, Truck, Warehouse } from "lucide-react";
 import { images } from "@/data/images";
 import { services } from "@/data/services";
 import { features } from "@/data/company";
@@ -85,18 +85,18 @@ export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-brand-black text-white">
       <Image
-        src={images.truckHighway.src}
-        alt={images.truckHighway.alt}
+        src={images.heroFleet.src}
+        alt={images.heroFleet.alt}
         fill
         priority
         sizes="100vw"
-        className="object-cover"
+        className="object-cover object-[62%_center]"
       />
-      <div className="absolute inset-0 bg-black/55" aria-hidden />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" aria-hidden />
+      <div className="absolute inset-0 bg-black/35" aria-hidden />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" aria-hidden />
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" aria-hidden />
 
-      <div className="section-pad relative grid items-center gap-10 py-14 sm:py-16 lg:grid-cols-[1fr_420px] lg:py-24">
+      <div className="section-pad relative grid items-center gap-10 py-16 sm:py-20 lg:grid-cols-[1fr_420px] lg:py-24">
         <div>
           <span className="chip-yellow animate-fadeUp whitespace-nowrap text-[10px] sm:text-xs">
             {t("hero.badge")}
@@ -131,6 +131,21 @@ export default function Hero() {
               {t("hero.how")}
             </a>
           </div>
+          <ul
+            className="animate-fadeUp mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-[13px] font-semibold text-white/85"
+            style={{ "--reveal-delay": "340ms" } as React.CSSProperties}
+          >
+            {[
+              { icon: Truck, label: t("hero.strip1") },
+              { icon: Warehouse, label: t("hero.strip2") },
+              { icon: ScrollText, label: t("hero.strip3") },
+            ].map(({ icon: Icon, label }) => (
+              <li key={label} className="flex items-center gap-2">
+                <Icon className="h-4 w-4 text-brand-yellow" aria-hidden />
+                {label}
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div
@@ -246,6 +261,12 @@ export default function Hero() {
           </div>
         </div>
       </div>
+
+      {/* Road-lane divider keeps the logistics cue at the fold */}
+      <div
+        aria-hidden
+        className="relative h-2 w-full bg-[repeating-linear-gradient(90deg,#ffde59_0_46px,transparent_46px_92px)] opacity-70"
+      />
     </section>
   );
 }

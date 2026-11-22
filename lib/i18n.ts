@@ -59,6 +59,9 @@ const en = {
   "hero.trackNotFound": "No shipment found for {id}. Double-check the LR number.",
   "hero.trackFailed": "Tracking lookup failed.",
   "hero.trackNetwork": "Network error — please try again.",
+  "hero.strip1": "Pan-India trucking",
+  "hero.strip2": "Warehousing & handling",
+  "hero.strip3": "Customs & documentation",
 
   "quote.title": "Tell us what moves",
   "quote.step1": "Step 1 of 2 · Your requirement",
@@ -254,6 +257,9 @@ const hi: Record<TKey, string> = {
   "hero.trackNotFound": "{id} के लिए कोई शिपमेंट नहीं मिला। LR नंबर दोबारा जांचें।",
   "hero.trackFailed": "ट्रैकिंग लुकअप विफल रहा।",
   "hero.trackNetwork": "नेटवर्क एरर — कृपया दोबारा कोशिश करें।",
+  "hero.strip1": "पूरे भारत में ट्रकिंग",
+  "hero.strip2": "वेयरहाउसिंग और हैंडलिंग",
+  "hero.strip3": "कस्टम्स और डॉक्युमेंटेशन",
 
   "quote.title": "बताइए क्या भेजना है",
   "quote.step1": "चरण 1 / 2 · आपकी आवश्यकता",
@@ -447,6 +453,9 @@ const kn: Record<TKey, string> = {
   "hero.trackNotFound": "{id} ಗಾಗಿ ಯಾವುದೇ ಶಿಪ್ಮೆಂಟ್ ಸಿಗಲಿಲ್ಲ. LR ಸಂಖ್ಯೆಯನ್ನು ಮತ್ತೊಮ್ಮೆ ಪರಿಶೀಲಿಸಿ.",
   "hero.trackFailed": "ಟ್ರ್ಯಾಕಿಂಗ್ ಹುಡುಕಾಟ ವಿಫಲವಾಯಿತು.",
   "hero.trackNetwork": "ನೆಟ್‌ವರ್ಕ್ ದೋಷ — ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "hero.strip1": "ಭಾರತದಾದ್ಯಂತ ಟ್ರಕಿಂಗ್",
+  "hero.strip2": "ಗೋದಾಮು ಮತ್ತು ನಿರ್ವಹಣೆ",
+  "hero.strip3": "ಕಸ್ಟಮ್ಸ್ ಮತ್ತು ದಾಖಲೆಗಳು",
 
   "quote.title": "ಏನು ಸಾಗಿಸಬೇಕು ಎಂದು ತಿಳಿಸಿ",
   "quote.step1": "ಹಂತ 1 / 2 · ನಿಮ್ಮ ಅಗತ್ಯ",
