@@ -7,8 +7,16 @@ import { images } from "@/data/images";
 import { services } from "@/data/services";
 import { features } from "@/data/company";
 import { useI18n } from "./LanguageProvider";
+import type { TKey } from "@/lib/i18n";
 
 type HeroTab = "price" | "track";
+
+const SERVICE_NAME: Record<string, TKey> = {
+  "packers-movers": "svc.pm.name",
+  "import-export": "svc.ie.name",
+  "sme-transport": "svc.sme.name",
+  "agri-export": "svc.agri.name",
+};
 
 export function prefillQuote(data: { from: string; to: string; service: string }) {
   try {
@@ -35,7 +43,7 @@ export default function Hero() {
   const onGetPrice = (e: React.FormEvent) => {
     e.preventDefault();
     if (!from.trim() || !to.trim()) {
-      setFormError("Enter both pickup and drop city so we can price the lane.");
+      setFormError(t("hero.errCities"));
       return;
     }
     setFormError(null);
@@ -45,7 +53,7 @@ export default function Hero() {
   const handleTrack = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!trackingId.trim()) {
-      setTrackMsg("Please enter a shipment / LR number.");
+      setTrackMsg(t("hero.errTrack"));
       return;
     }
     setTracking(true);
@@ -63,12 +71,12 @@ export default function Hero() {
       } else {
         setTrackMsg(
           data.error === "Shipment not found"
-            ? `No shipment found for “${trackingId.toUpperCase()}”. Double-check the LR number.`
-            : data.error || "Tracking lookup failed."
+            ? t("hero.trackNotFound").replace("{id}", trackingId.toUpperCase())
+            : data.error || t("hero.trackFailed")
         );
       }
     } catch {
-      setTrackMsg("Network error — please try again.");
+      setTrackMsg(t("hero.trackNetwork"));
     } finally {
       setTracking(false);
     }
@@ -88,22 +96,23 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" aria-hidden />
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" aria-hidden />
 
-      <div className="section-pad relative grid items-center gap-10 py-16 lg:grid-cols-[1fr_420px] lg:py-24">
+      <div className="section-pad relative grid items-center gap-10 py-14 sm:py-16 lg:grid-cols-[1fr_420px] lg:py-24">
         <div>
-          <span className="chip-yellow animate-fadeUp">{t("hero.badge")}</span>
+          <span className="chip-yellow animate-fadeUp whitespace-nowrap text-[10px] sm:text-xs">
+            {t("hero.badge")}
+          </span>
           <h1
-            className="animate-fadeUp mt-4 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl"
+            className="animate-fadeUp mt-5 text-[2.1rem] font-extrabold leading-[1.2] tracking-tight sm:text-5xl sm:leading-[1.1] lg:text-[4rem]"
             style={{ "--reveal-delay": "90ms" } as React.CSSProperties}
           >
             {t("hero.titleLine1")}
             <br />
-            <span className="relative inline-block text-white">
+            <span className="inline-block text-white underline decoration-brand-yellow decoration-[5px] underline-offset-[9px] sm:decoration-[7px] sm:underline-offset-[14px]">
               {t("hero.titleLine2")}
-              <span aria-hidden className="absolute inset-x-0 -bottom-1 h-1.5 rounded-full bg-brand-yellow" />
             </span>
           </h1>
           <p
-            className="animate-fadeUp mt-4 max-w-md text-base leading-relaxed text-white/85 sm:text-lg"
+            className="animate-fadeUp mt-5 max-w-xl text-[15px] leading-relaxed text-white/85 sm:text-lg"
             style={{ "--reveal-delay": "180ms" } as React.CSSProperties}
           >
             {t("hero.subtitle")}
@@ -125,9 +134,10 @@ export default function Hero() {
         </div>
 
         <div
-          className="animate-fadeUp rounded-3xl bg-white p-2 text-brand-black shadow-hero"
+          className="animate-fadeUp relative overflow-hidden rounded-3xl bg-white p-2 text-brand-black shadow-hero ring-1 ring-white/25"
           style={{ "--reveal-delay": "200ms" } as React.CSSProperties}
         >
+          <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-brand-yellow" />
           {features.trackShipment && (
             <div className="flex gap-1 rounded-2xl bg-neutral-100 p-1" role="tablist" aria-label="Booking or tracking">
               {(
@@ -163,8 +173,8 @@ export default function Hero() {
                     <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden />
                     <input
                       id="hero-from"
-                      className="input !pl-10"
-                      placeholder="e.g. Bengaluru"
+                      className="input !bg-neutral-50 !pl-10"
+                      placeholder={t("hero.phFrom")}
                       value={from}
                       onChange={(e) => setFrom(e.target.value)}
                     />
@@ -178,8 +188,8 @@ export default function Hero() {
                     <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden />
                     <input
                       id="hero-to"
-                      className="input !pl-10"
-                      placeholder="e.g. Hyderabad"
+                      className="input !bg-neutral-50 !pl-10"
+                      placeholder={t("hero.phTo")}
                       value={to}
                       onChange={(e) => setTo(e.target.value)}
                     />
@@ -189,10 +199,15 @@ export default function Hero() {
                   <label htmlFor="hero-service" className="label">
                     {t("hero.service")}
                   </label>
-                  <select id="hero-service" className="input" value={service} onChange={(e) => setService(e.target.value)}>
+                  <select
+                    id="hero-service"
+                    className="input !bg-neutral-50"
+                    value={service}
+                    onChange={(e) => setService(e.target.value)}
+                  >
                     {services.map((s) => (
                       <option key={s.key} value={s.name}>
-                        {s.name}
+                        {t(SERVICE_NAME[s.key] ?? "svc.pm.name")}
                       </option>
                     ))}
                   </select>
@@ -213,15 +228,15 @@ export default function Hero() {
                     <Package className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden />
                     <input
                       id="hero-track"
-                      className="input !pl-10"
-                      placeholder="e.g. XTX123456"
+                      className="input !bg-neutral-50 !pl-10"
+                      placeholder={t("hero.phTrack")}
                       value={trackingId}
                       onChange={(e) => setTrackingId(e.target.value)}
                     />
                   </div>
                 </div>
                 <button type="submit" disabled={tracking} className="btn-primary w-full !py-3.5 disabled:opacity-60">
-                  {tracking ? "Checking…" : t("hero.trackCta")}
+                  {tracking ? t("hero.checking") : t("hero.trackCta")}
                 </button>
                 {trackMsg && (
                   <p className="rounded-xl border border-line bg-neutral-50 px-4 py-3 text-sm font-medium">{trackMsg}</p>
