@@ -1,7 +1,7 @@
 "use client";
 
 import { FileText, Upload, X } from "lucide-react";
-import { ACCEPT, MAX_BYTES, compressImage, fmtSize, isImageFile, isPdfFile } from "@/lib/compress-image";
+import { ACCEPT, MAX_BYTES, MAX_DOC_BYTES, compressImage, fmtSize, isAllowedDocFile, isImageFile } from "@/lib/compress-image";
 
 export interface PickedDoc {
   id: string;
@@ -29,34 +29,65 @@ export default function DocPicker({ id, files, onChange, maxFiles = 5, hint }: D
     const next: PickedDoc[] = [];
     for (const file of Array.from(list)) {
       const docId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-      const image = isImageFile(file);
-      const pdf = isPdfFile(file);
-      if (!image && !pdf) {
-        next.push({ id: docId, name: file.name, originalSize: file.size, finalSize: file.size, compressed: false, blob: null, error: "Only PDF, JPG or PNG allowed" });
+      if (!isAllowedDocFile(file)) {
+        next.push({
+          id: docId,
+          name: file.name,
+          originalSize: file.size,
+          finalSize: file.size,
+          compressed: false,
+          blob: null,
+          error: "Unsupported file — use PDF, Word, Excel, CSV, TXT or an image.",
+        });
         continue;
       }
-      if (pdf && file.size > MAX_BYTES) {
-        next.push({ id: docId, name: file.name, originalSize: file.size, finalSize: file.size, compressed: false, blob: null, error: `PDF is ${fmtSize(file.size)} — upload a scan under 2 MB.` });
+      if (file.size > MAX_DOC_BYTES) {
+        next.push({
+          id: docId,
+          name: file.name,
+          originalSize: file.size,
+          finalSize: file.size,
+          compressed: false,
+          blob: null,
+          error: `${fmtSize(file.size)} is over the 20 MB limit.`,
+        });
         continue;
       }
-      if (image && file.size > MAX_BYTES) {
+      if (isImageFile(file) && file.size > MAX_BYTES) {
         try {
           const blob = await compressImage(file);
           next.push({
             id: docId,
-            name: file.name.replace(/\.(png|jpg|jpeg)$/i, ".jpg"),
+            name: file.name.replace(/\.(png|jpg|jpeg|webp)$/i, ".jpg"),
             originalSize: file.size,
             finalSize: blob.size,
             compressed: true,
             blob,
-            error: blob.size > MAX_BYTES ? "Still over 2 MB — try a smaller photo." : null,
+            error: null,
           });
         } catch {
-          next.push({ id: docId, name: file.name, originalSize: file.size, finalSize: file.size, compressed: false, blob: null, error: "Could not compress this image." });
+          // Compression is a convenience only — upload the original instead.
+          next.push({
+            id: docId,
+            name: file.name,
+            originalSize: file.size,
+            finalSize: file.size,
+            compressed: false,
+            blob: file,
+            error: null,
+          });
         }
         continue;
       }
-      next.push({ id: docId, name: file.name, originalSize: file.size, finalSize: file.size, compressed: false, blob: file, error: null });
+      next.push({
+        id: docId,
+        name: file.name,
+        originalSize: file.size,
+        finalSize: file.size,
+        compressed: false,
+        blob: file,
+        error: null,
+      });
     }
     onChange([...files, ...next].slice(0, maxFiles));
     e.target.value = "";
@@ -72,8 +103,10 @@ export default function DocPicker({ id, files, onChange, maxFiles = 5, hint }: D
           <Upload className="h-5 w-5" aria-hidden />
         </span>
         <span className="text-left">
-          <span className="block text-sm font-extrabold">Attach files — PDF, JPG, PNG</span>
-          <span className="block text-xs text-muted">{hint ?? `Photos auto-compress under 2 MB. Max ${maxFiles} files.`}</span>
+          <span className="block text-sm font-extrabold">Attach files — PDF, Word, Excel, images</span>
+          <span className="block text-xs text-muted">
+            {hint ?? `Any document up to 20 MB. Photos auto-compress. Max ${maxFiles} files.`}
+          </span>
         </span>
       </label>
       <input id={id} type="file" multiple accept={ACCEPT} className="hidden" onChange={onPick} />

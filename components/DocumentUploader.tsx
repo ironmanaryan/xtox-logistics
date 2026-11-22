@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { CheckCircle2, FileText, Upload, X } from "lucide-react";
-import { MAX_BYTES, compressImage, fmtSize, isImageFile, isPdfFile } from "@/lib/compress-image";
+import { MAX_BYTES, MAX_DOC_BYTES, compressImage, fmtSize, isAllowedDocFile, isImageFile } from "@/lib/compress-image";
+import { uploadDocuments } from "@/lib/doc-upload";
 
 const DOC_TYPES = [
   "Commercial Invoice",
@@ -45,30 +46,29 @@ export default function DocumentUploader() {
     const next: PickedFile[] = [];
     for (const file of Array.from(list)) {
       const id = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-      const isImage = isImageFile(file);
-      const isPdf = isPdfFile(file);
-      if (!isImage && !isPdf) {
-        next.push({ id, name: file.name, originalSize: file.size, finalSize: file.size, compressed: false, blob: null, error: "Only PDF, JPG or PNG allowed" });
+      if (!isAllowedDocFile(file)) {
+        next.push({ id, name: file.name, originalSize: file.size, finalSize: file.size, compressed: false, blob: null, error: "Unsupported file — use PDF, Word, Excel, CSV, TXT or an image." });
         continue;
       }
-      if (isPdf && file.size > MAX_BYTES) {
-        next.push({ id, name: file.name, originalSize: file.size, finalSize: file.size, compressed: false, blob: null, error: `PDF is ${fmt(file.size)} — PDFs can't be auto-compressed. Please upload a scan under 2 MB.` });
+      if (file.size > MAX_DOC_BYTES) {
+        next.push({ id, name: file.name, originalSize: file.size, finalSize: file.size, compressed: false, blob: null, error: `${fmt(file.size)} is over the 20 MB limit.` });
         continue;
       }
-      if (isImage && file.size > MAX_BYTES) {
+      if (isImageFile(file) && file.size > MAX_BYTES) {
         try {
           const blob = await compressImage(file);
           next.push({
             id,
-            name: file.name.replace(/\.(png|jpg|jpeg)$/i, ".jpg"),
+            name: file.name.replace(/\.(png|jpg|jpeg|webp)$/i, ".jpg"),
             originalSize: file.size,
             finalSize: blob.size,
             compressed: true,
             blob,
-            error: blob.size > MAX_BYTES ? "Still over 2 MB after compression — try a smaller photo." : null,
+            error: null,
           });
         } catch {
-          next.push({ id, name: file.name, originalSize: file.size, finalSize: file.size, compressed: false, blob: null, error: "Could not compress this image." });
+          // Compression is a convenience only — upload the original instead.
+          next.push({ id, name: file.name, originalSize: file.size, finalSize: file.size, compressed: false, blob: file, error: null });
         }
         continue;
       }
@@ -89,7 +89,7 @@ export default function DocumentUploader() {
       return;
     }
     if (uploadable.length === 0) {
-      setError("Please choose at least one valid document (PDF/JPG/PNG under 2 MB).");
+      setError("Please choose at least one valid document (PDF, Word, Excel, CSV, TXT or an image up to 20 MB).");
       return;
     }
     if (!agree) {
@@ -98,14 +98,13 @@ export default function DocumentUploader() {
     }
     setBusy(true);
     try {
-      const fd = new FormData();
-      fd.append("ref", ref.trim());
-      fd.append("docType", docType);
-      for (const f of uploadable) fd.append("files", f.blob as Blob, f.name);
-      const res = await fetch("/api/documents", { method: "POST", body: fd });
-      const data = await res.json();
-      if (!res.ok || !data.ok) throw new Error(data.error || "Upload failed");
-      setDone(data.files as string[]);
+      const result = await uploadDocuments({
+        ref,
+        docType,
+        files: uploadable.map((f) => ({ name: f.name, blob: f.blob as Blob })),
+      });
+      if (!result.ok) throw new Error(result.error || "Upload failed");
+      setDone(result.files);
       setFiles([]);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed");
@@ -160,10 +159,17 @@ export default function DocumentUploader() {
         <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-yellow text-brand-black">
           <Upload className="h-6 w-6" aria-hidden />
         </span>
-        <span className="text-sm font-extrabold">Click to choose files — PDF, JPG, PNG</span>
-        <span className="text-xs text-muted">Images over 2 MB are auto-compressed to ~1–2 MB in your browser. Max 10 files.</span>
+        <span className="text-sm font-extrabold">Click to choose files — PDF, Word, Excel, CSV, images</span>
+        <span className="text-xs text-muted">Any document up to 20 MB. Photos over 2 MB are auto-compressed. Max 10 files.</span>
       </label>
-      <input id="doc-files" type="file" multiple accept=".pdf,.jpg,.jpeg,.png" className="hidden" onChange={onPick} />
+      <input
+        id="doc-files"
+        type="file"
+        multiple
+        accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.xls,.xlsx,.csv,.txt,.odt,.rtf"
+        className="hidden"
+        onChange={onPick}
+      />
 
       {files.length > 0 && (
         <ul className="mt-4 space-y-2">
@@ -179,7 +185,7 @@ export default function DocumentUploader() {
                       {f.compressed && (
                         <span className="font-bold text-green-700"> → {fmt(f.finalSize)} (compressed ✓)</span>
                       )}
-                      {!f.compressed && f.finalSize <= MAX_BYTES && " • under 2 MB ✓"}
+                      {!f.compressed && " ✓"}
                     </>
                   )}
                 </p>

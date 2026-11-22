@@ -1,19 +1,33 @@
-/** Shared client-side file helpers: images auto-compress to ~1–2 MB. */
+/** Shared client-side file helpers: images auto-compress, documents upload as-is. */
 
-export const MAX_BYTES = 2 * 1024 * 1024; // 2 MB hard limit
+/** Images are compressed to this so photo uploads stay fast. */
+export const MAX_BYTES = 2 * 1024 * 1024; // 2 MB image target after compression
 export const TARGET_BYTES = 1.9 * 1024 * 1024; // compress target
-export const ACCEPT = ".pdf,.jpg,.jpeg,.png";
+/** Hard ceiling for any single document (signed direct-to-storage upload). */
+export const MAX_DOC_BYTES = 20 * 1024 * 1024; // 20 MB
+
+export const ACCEPT =
+  ".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.xls,.xlsx,.csv,.txt,.odt,.rtf";
+
+const EXTS = ["pdf", "jpg", "jpeg", "png", "webp", "doc", "docx", "xls", "xlsx", "csv", "txt", "odt", "rtf"];
 
 export function fmtSize(n: number): string {
   return n >= 1024 * 1024 ? `${(n / 1024 / 1024).toFixed(2)} MB` : `${Math.round(n / 1024)} KB`;
 }
 
 export function isImageFile(file: File): boolean {
-  return /^image\/(jpeg|png|jpg)$/i.test(file.type);
+  return /^image\/(jpeg|png|jpg|webp)$/i.test(file.type) || /\.(jpe?g|png|webp)$/i.test(file.name);
 }
 
 export function isPdfFile(file: File): boolean {
   return file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+}
+
+/** PDF, Word, Excel, CSV, TXT, ODT/RTF or an image. */
+export function isAllowedDocFile(file: File): boolean {
+  if (isPdfFile(file) || isImageFile(file)) return true;
+  const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+  return EXTS.includes(ext);
 }
 
 /** Compress an image file with canvas until it fits under TARGET_BYTES. */

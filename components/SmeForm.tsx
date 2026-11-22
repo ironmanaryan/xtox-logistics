@@ -7,6 +7,7 @@ import { TRUCKS, GOODS_CATEGORIES } from "@/data/fleet";
 import DocPicker, { type PickedDoc } from "@/components/DocPicker";
 import FormConsent from "@/components/FormConsent";
 import { useAuthUserId } from "@/lib/use-auth-user";
+import { uploadDocuments } from "@/lib/doc-upload";
 
 const LOADING_HELP = 800;
 const INSURANCE_RATE = 0.02;
@@ -84,13 +85,12 @@ export default function SmeForm({ mode }: { mode: "on-demand" | "contract" }) {
       try {
         const valid = docs.filter((d) => !d.error && d.blob);
         if (valid.length > 0) {
-          const fd = new FormData();
-          fd.append("ref", phone.trim());
-          fd.append("docType", "SME Supporting Document");
-          for (const d of valid) fd.append("files", d.blob as Blob, d.name);
-          const up = await fetch("/api/documents", { method: "POST", body: fd });
-          const ud = await up.json().catch(() => null);
-          if (up.ok && ud?.ok && Array.isArray(ud.files)) setAttached(ud.files.length);
+          const up = await uploadDocuments({
+            ref: phone,
+            docType: "SME Supporting Document",
+            files: valid.map((d) => ({ name: d.name, blob: d.blob as Blob })),
+          });
+          if (up.ok) setAttached(up.files.length);
         }
       } catch {
         /* document upload is optional — ignore failures */
@@ -323,7 +323,7 @@ export default function SmeForm({ mode }: { mode: "on-demand" | "contract" }) {
           files={docs}
           onChange={setDocs}
           maxFiles={5}
-          hint="Invoice, LR copy or goods photos. Images auto-compress under 2 MB."
+          hint="Invoice, LR copy, e-way bill or goods photos. Any document up to 20 MB."
         />
       </div>
 

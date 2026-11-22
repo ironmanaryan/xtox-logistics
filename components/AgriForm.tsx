@@ -7,6 +7,7 @@ import { useAuthUserId } from "@/lib/use-auth-user";
 import { CROPS, GOVT_DOCS, DEST_COUNTRIES, inr } from "@/data/agri";
 import DocPicker, { type PickedDoc } from "@/components/DocPicker";
 import FormConsent from "@/components/FormConsent";
+import { uploadDocuments } from "@/lib/doc-upload";
 
 export default function AgriForm({ mode }: { mode: "export" | "govt-docs" }) {
   const isExport = mode === "export";
@@ -52,13 +53,12 @@ export default function AgriForm({ mode }: { mode: "export" | "govt-docs" }) {
     try {
       const valid = docs.filter((d) => !d.error && d.blob);
       if (valid.length === 0) return 0;
-      const fd = new FormData();
-      fd.append("ref", phone.trim());
-      fd.append("docType", docType);
-      for (const d of valid) fd.append("files", d.blob as Blob, d.name);
-      const up = await fetch("/api/documents", { method: "POST", body: fd });
-      const ud = await up.json().catch(() => null);
-      if (up.ok && ud?.ok && Array.isArray(ud.files)) return ud.files.length as number;
+      const up = await uploadDocuments({
+        ref: phone,
+        docType,
+        files: valid.map((d) => ({ name: d.name, blob: d.blob as Blob })),
+      });
+      if (up.ok) return up.files.length;
     } catch {
       /* optional — ignore */
     }
@@ -260,7 +260,7 @@ export default function AgriForm({ mode }: { mode: "export" | "govt-docs" }) {
           files={docs}
           onChange={setDocs}
           maxFiles={5}
-          hint="Photos auto-compress under 2 MB. Speeds up verification."
+          hint="Aadhaar, PAN, 7/12, land papers or crop photos — up to 20 MB each."
         />
       </div>
 

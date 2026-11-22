@@ -805,7 +805,7 @@ export default function AdminPage() {
                         files={coverFiles}
                         onChange={setCoverFiles}
                         maxFiles={1}
-                        hint="JPG/PNG under 5 MB. Replaces the current cover on save."
+                        hint="JPG/PNG/WebP under 5 MB. Replaces the current cover on save."
                       />
                     </div>
                   )}

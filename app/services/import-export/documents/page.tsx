@@ -8,7 +8,7 @@ import { FileUp, Ship, Send } from "lucide-react";
 export const metadata: Metadata = {
   title: "Upload Shipment Documents",
   description:
-    "Upload commercial invoice, packing list, bill of lading and certificates. Photos auto-compress to under 2 MB right in your browser.",
+    "Upload commercial invoice, packing list, bill of lading, certificates, Word, Excel or scanned images — up to 20 MB per file, straight to secure storage.",
 };
 
 const CHECKLIST: { title: string; docs: string[] }[] = [
@@ -48,8 +48,8 @@ export default function DocumentsPage() {
               </span>
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
-              Photos bigger than 2 MB are <strong className="text-brand-black">auto-compressed to 1–2 MB</strong> in
-              your browser before upload. PDFs must already be under 2 MB.
+              Any document up to 20 MB — PDF, Word, Excel, CSV or a photo. Photos over 2 MB are compressed in your
+              browser first, then every file goes straight to secure storage.
             </p>
           </div>
         </section>

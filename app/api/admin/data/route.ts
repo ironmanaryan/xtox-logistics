@@ -69,7 +69,7 @@ export async function GET(req: Request) {
         if (signed?.signedUrl) {
           documents.push({
             ref: dir.name,
-            name: f.name.replace(/^\d+-/, ""),
+            name: f.name.replace(/^\d+(-\d+)?-/, ""),
             path,
             size: (f.metadata as { size?: number }).size ?? 0,
             created: (f as { created_at?: string }).created_at ?? null,
